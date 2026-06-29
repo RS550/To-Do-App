@@ -1,23 +1,31 @@
-import {nanoid} from 'nanoid';
+import {nanoid} from 'nanoid';      //used to produce unique task id values
 
 function Form({tasks, setTasks}){
 
+    //onSubmit action
     const handleSubmit = (event) => {
+
+        //prevent page reload on form submition
         event.preventDefault();
 
+        //grab textbox content
         const value = event.target.task.value;
+        
+        //creates new task object
         const newTask = {
-            title: value,
-            id: nanoid(),
-            isCompleted: false,
+            title: value,       //contents of the textbox
+            id: nanoid(),       //produces unique task id value
+            isCompleted: false, //for tracking completed tasks
         };
 
+        //update the React state by producing new array with new task included
         setTasks((prevTasks) => [...prevTasks, newTask]);
 
+        //save the tasklist to local storage
         const updatedTaskList = JSON.stringify([...tasks,newTask]);
         localStorage.setItem('tasks', updatedTaskList);
 
-        event.target.reset();
+        event.target.reset();   //clear textbox for next task
     };
 
     return (
@@ -29,13 +37,9 @@ function Form({tasks, setTasks}){
                 id="task"
                 placeholder="What is next?"
                 />
+                <button className="newTask">+</button>
             </label>
-
-            <button>
-               <span className="visually-hidden">Submit</span>
-               
-            </button>
-
+            <button className='dropDown'>MakeDropdown for more task info</button>
         </form>
     );
 }

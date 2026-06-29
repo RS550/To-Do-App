@@ -1,0 +1,46 @@
+ /* App Rendering
+ .wrapper
+ .pet
+ .taskTracking
+ .form
+ */
+
+/* Header Rendering
+.header 
+h1
+buttons: .focus and .petView 
+*/
+
+/* Form Rendering
+.form 
+.task 
+.newTask 
+.dropDown 
+*/
+
+/* TaskList Rendering
+.taskList
+p
+*/
+
+/* Item Rendering
+.taskItem
+.editForm
+.taskItemsLeft
+.taskItemsRight
+.deleteButton
+*/
+
+/* TaskTracking Rendering
+.taskStats 
+p
+ */
+
+ /* Card Rendering
+.card a div element
+.cardImage a img element
+.cardTitle a h2 element
+.cardText a p element
+ */
+
+ 

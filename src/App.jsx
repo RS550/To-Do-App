@@ -29,9 +29,12 @@ function App() {
   return (
     <div className="wrapper">
       <Header />
-      <Card /> 
-      <TaskTracking tasksCompleted={tasksCompleted} tasksTotal={tasksTotal} />
-      <Form tasks={tasks} setTasks={setTasks} />
+
+      <div className='twoColumn'>
+      <Card className='pet' />
+      <TaskTracking className='taskTracking' tasksCompleted={tasksCompleted} tasksTotal={tasksTotal} />
+      <Form className='form' tasks={tasks} setTasks={setTasks} />
+      </div>
       <TaskList tasks={tasks} setTasks={setTasks} />
     </div>
   );   

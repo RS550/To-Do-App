@@ -1,6 +1,6 @@
 function TaskTracking({ tasksCompleted, tasksTotal }) {
   return (
-    <section className="taskTracking_section">
+    <section className="taskStats">
       <div>
         <p>Completed: {tasksCompleted}</p>
         <p>Total: {tasksTotal}</p>

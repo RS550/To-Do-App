@@ -136,3 +136,38 @@ h1 {
     font-size: 14px;
   }
   button:hover { background-color: #9b6bbf; border-color: #9f6dc5; color: #fff; }
+
+
+  .form {
+    display: grid;
+    column-fill:auto;
+    height:200px;
+    align-items: baseline;
+  }
+
+  .form input[type="text"] {
+    flex: 1;
+    padding: 6px 8px;
+    background-color: #723ea0;
+    border: 3px solid #723ea0;
+    border-radius: 5px;
+    color: #e0c1fb;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 25px;
+    outline: none;
+  }
+
+  .form button{
+    max-height: 75px;
+  }
+
+  .twoColumn {
+    display: grid;
+    columns: 250px 3;
+  }
+
+  .taskItemsLeft {
+  }
+
+  .taskItemsRight {
+  }
