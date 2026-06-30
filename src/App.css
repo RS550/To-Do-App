@@ -47,17 +47,91 @@ header h1 {
   font-weight: 700;
 }
 
-header button {
+/* ===== NavBar ===== */
+.navBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+ 
+.navBar .focus {
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
   font-size: 0.9rem;
   cursor: pointer;
+  background-color: #2b2d42;
+  color: #fff;
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
-
-header button:active {
+ 
+.navBar .focus:hover {
+  background-color: #1c1e2e;
+}
+ 
+.navBar .focus:active {
   transform: scale(0.97);
+}
+ 
+/* Toggle switch for showing/hiding the pet card */
+.toggleSwitch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+ 
+.toggleSwitch input {
+  display: none;
+}
+ 
+.toggleSlider {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background-color: #dde3e7;
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
+ 
+.toggleSlider::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+ 
+.toggleSwitch input:checked + .toggleSlider {
+  background-color: #2b2d42;
+}
+ 
+.toggleSwitch input:checked + .toggleSlider::before {
+  transform: translateX(18px);
+}
+ 
+.toggleLabel {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+ 
+/* ===== Focus View (alternate page when Focus is active) ===== */
+.focusView {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+ 
+.focusView .taskStats {
+  max-width: 320px;
 }
 
 .focus {
@@ -93,14 +167,14 @@ header button:active {
 
 @media (max-width: 800px) {
   .two-column {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: auto 1fr;
   }
   .card {
     grid-column: 1 / -1;
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 900px) {
   .two-column {
     grid-template-columns: 1fr;
   }
@@ -122,7 +196,6 @@ header button:active {
 .cardImage {
   width: auto;
   height: auto;
-  object-fit: contain;
   margin-bottom: 8px;
 }
 
@@ -148,12 +221,12 @@ header button:active {
 }
 
 /* ===== Task Stats ===== */
-.taskStats {
+.task-stats {
   padding: 120px 0px 50px 20px;
   
 }
 
-.taskStats p {
+.task-stats p {
   font-size: 25px;
   margin: 4px 0;
   color: var(--c5);

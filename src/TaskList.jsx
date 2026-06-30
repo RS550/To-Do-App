@@ -3,9 +3,11 @@ import { useState } from 'react';
 
 
 // from array of tasks, produces ordered list of tasks
-function TaskList({tasks, setTasks}) {
+function TaskList({tasks, setTasks, limit}) {
   const dragItem = React.useRef(null);
   const dragOverItem = React.useRef(null);
+
+  const displayTasks = limit ? tasks.slice(0, limit) : tasks;
 
   const handleSort = () => {
     const updatedTasks = [...tasks];
