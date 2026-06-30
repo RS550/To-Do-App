@@ -129,15 +129,15 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
       ) : (
         <>
         <div className="taskItemsLeft" onDoubleClick={handleEdit}>
-          <p style={item.isCompleted ? { textDecoration: "line-through" } : {}}>
-            {item?.title}
-          </p>
           <input
             type="checkbox"
             checked={item.isCompleted || false}
             onChange={completeTask}
             onDoubleClick={(e) => e.stopPropagation()} //prevent the editing double clock from checking box
           />
+          <p style={item.isCompleted ? { textDecoration: "line-through" } : {}}>
+            {item?.title}
+          </p>
         </div>
         <div className="taskItemsRight">
           <button onClick={handleDelete}>
@@ -149,5 +149,6 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
     </li>
   );
 }
+
 
 export default TaskList;

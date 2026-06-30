@@ -1,173 +1,294 @@
-body{
-    background: #c892f7;
-    font-family: 'Courier New', Courier, monospace;
-    min-height: 100vh;
+/* ===== Preset Colors ===== */
+:root {
+    --c8: #0f0c1d;
+    --c7: #201647;
+    --c6: #0f0c1d;
+    --c5: #3a2c70b1;
+    --c4: #5643a2;
+    --c3: #7160c1;
+    --c2: #8573d3;
+    --c1: #a69bdf;
+    --c0: #cac0f5;  
 }
 
-.container {
-    display: grid;
-    grid-template-rows: auto auto auto;
-    color: #723ea0;
-    width: calc(100% - 50%);
-    max-width: 800px;
-    margin: 25px auto;
-    border: 6px solid #723ea0;
-    border-radius: 15px;
+/* ===== Reset & Base ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.header {
-    border: 4px solid #723ea0;
-    border-radius: 15px;
-    text-indent: 15px;
-    margin: 30px 30px 15px 30px;
+body {
+  font-family:'Courier New', Courier, monospace;
+  background-color: var(--c1);
+  color: var(--c7);
+  line-height: 1.5;
 }
 
-h1 {
-    text-align:center;
-    color:#723ea0;
-    font-size: 65px;
-    font-family:'Courier New', Courier, monospace;
+/* ===== Layout Wrapper ===== */
+.wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
 }
 
-.subHead {
-    display: flex;
-    align-items:center;
-    gap: 12px;
-    border: 4px solid #723ea0;
-    border-radius: 15px;
-    margin: 15px 30px;
-    padding: 0 15px;
+/* ===== Header ===== */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
-.subHead h2 {
-    color:#e0c1fb;
-    white-space: nowrap;
-    font-family:'Courier New', Courier, monospace;
+header h1 {
+  font-size: 75px;
+  font-weight: 700;
 }
 
-.subHead input[type="text"] {
-    flex: 1;
-    padding: 6px 8px;
-    background-color: #723ea0;
-    border: 3px solid #723ea0;
-    border-radius: 5px;
-    color: #e0c1fb;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 25px;
-    outline: none;
-  }
- 
-  .contentContainer {
-    display: grid;
-    grid-template-columns: 50px 1fr 60px;
-    align-items: center;
-    gap: 6px 8px;
-    background-color: #c892f7;
-    border: 4px solid #723ea0;
-    border-radius: 15px;
-    margin: 15px 30px 30px 30px;
-    padding: 10px;
-    color: #723ea0;
-  }
- 
-  .cell {
-    display: flex;
-    align-items: center;
-    padding: 4px 6px;
-    min-height: 36px;
-  }
- 
-  .taskText p {
-    margin: 0 0 0 15px;
-    word-break: break-word;
-    font-size: 20px;
-    font-weight: bold;
-    color: #5e2f82;
-    font-family: 'Courier New', Courier, monospace;
-  }
- 
-  .btnCell { justify-content: center; }
- 
-  .checkLabel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-  }
- 
-  .checkB {
-    width: 18px;
-    height: 18px;
-    accent-color: #c892f7;
-    cursor: pointer;
-    opacity: 50%;
-  }
- 
-  .dragHandle {
-    cursor: grab;
-    border-right: 5px dotted #9f6dc5;
-  }
-  .dragHandle:active { cursor: grabbing; background-color: #9f6dc5; }
- 
-  .dragging { opacity: 0.3; }
-  .dragOver { background-color: #9f6dc5; border-radius: 6px; }
- 
-  .inlineEdit {
-    width: 100%;
-    background-color: #7f4bad;
-    padding: 4px 6px;
-    border: 2px solid #c892f7;
-    border-radius: 5px;
-    color: #e0c1fb;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 16px;
-    outline: none;
-    margin-left: 15px;
-  }
- 
-  button {
-    background-color: #7f4bad;
-    color: #c892f7;
-    padding: 4px 9px;
-    border: 3px solid #723ea0;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  button:hover { background-color: #9b6bbf; border-color: #9f6dc5; color: #fff; }
+header button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
 
+header button:active {
+  transform: scale(0.97);
+}
 
-  .form {
-    display: grid;
-    column-fill:auto;
-    height:200px;
-    align-items: baseline;
-  }
+.focus {
+  background-color: var(--c3);
+  color: var(--c1);
+}
 
-  .form input[type="text"] {
-    flex: 1;
-    padding: 6px 8px;
-    background-color: #723ea0;
-    border: 3px solid #723ea0;
-    border-radius: 5px;
-    color: #e0c1fb;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 25px;
-    outline: none;
-  }
+.focus:hover {
+  background-color: var(--c4);
+}
 
-  .form button{
-    max-height: 75px;
-  }
+.petView {
+  background-color: var(--c3);
+  color: var(--c1);
+}
 
-  .twoColumn {
-    display: grid;
-    columns: 250px 3;
-  }
+.petView:hover {
+  background-color: var(--c4);
+}
 
-  .taskItemsLeft {
-  }
+/* ===== Two Column Layout (Pet + Stats + Form) ===== */
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 32px;
+  align-items: stretch;
+  padding: 50px;
+  border-top: 6px dotted var(--c2);
+  border-bottom: 6px dotted var(--c2);
+  
+}
 
-  .taskItemsRight {
+@media (max-width: 800px) {
+  .two-column {
+    grid-template-columns: 1fr 1fr;
   }
+  .card {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 500px) {
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== Pet Card ===== */
+.card {
+  background-color: var(--c3);
+  border: 4px solid var(--c4);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px var(--c4);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.cardImage {
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+
+.cardTitle {
+  font-size: 25px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--c1);
+}
+
+.cardText {
+  font-size: 0.9rem;
+  color: var(--c1);
+}
+
+.subColumn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-template-columns: auto;
+  background-color: var(--c5);
+  box-shadow: 0 2px 8px var(--c4);
+}
+
+/* ===== Task Stats ===== */
+.taskStats {
+  padding: 120px 0px 50px 20px;
+  
+}
+
+.taskStats p {
+  font-size: 25px;
+  margin: 4px 0;
+  color: var(--c5);
+}
+
+/* ===== Form ===== */
+.form {
+  padding: 20px;
+}
+
+.form label {
+  display: flex;
+  gap: 8px;
+}
+
+.form input[type="text"] {
+  flex: 1;
+  padding: 10px 12px;
+  border:none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--c6);
+  background-color: var(--c3);
+}
+
+.form input[type="text"]:focus {
+  outline: none;
+  border-color: var(--c3);
+}
+
+.newTask {
+  border: none;
+  border-radius: 8px;
+  background-color:var(--c3);
+  color: var(--c0);
+  font-size: 1.2rem;
+  width: 44px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.newTask:hover {
+  background-color: var(--c5);
+}
+
+.dropDown {
+  border: none;
+  background: none;
+  color: var(--c5);
+  font-size: 0.8rem;
+  text-align: left;
+  cursor: pointer;
+  padding: 20px 0 0 0;
+}
+
+.dropDown:hover {
+  text-decoration: underline;
+}
+
+/* ===== Task List ===== */
+.taskList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.taskItem {
+  background-color:var(--c2);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px var(--c3);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: grab;
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.taskItem:active {
+  cursor: grabbing;
+}
+
+.taskItem:hover {
+  box-shadow: 0 3px 10px var(--c5);
+}
+
+.taskItemsLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.taskItemsLeft p {
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.taskItemsLeft input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--c1);
+  cursor: pointer;
+  border-radius: 70px;
+}
+
+.taskItemsRight button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.deleteButton {
+  font-size: 0.8rem;
+  color: var(--c0);
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.deleteButton:hover {
+  color: rgb(75, 40, 115);
+}
+
+/* ===== Edit Mode ===== */
+.editForm {
+  width: 100%;
+}
+
+.editForm input {
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background-color: var(--c0);
+}

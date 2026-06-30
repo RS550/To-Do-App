@@ -30,10 +30,13 @@ function App() {
     <div className="wrapper">
       <Header />
 
-      <div className='twoColumn'>
+      <div className='two-column'>
       <Card className='pet' />
-      <TaskTracking className='taskTracking' tasksCompleted={tasksCompleted} tasksTotal={tasksTotal} />
-      <Form className='form' tasks={tasks} setTasks={setTasks} />
+      <div className="sub-Column"> 
+        <TaskTracking className='task-tracking' tasksCompleted={tasksCompleted} tasksTotal={tasksTotal} />
+        <Form className='form' tasks={tasks} setTasks={setTasks} />
+      </div>
+      
       </div>
       <TaskList tasks={tasks} setTasks={setTasks} />
     </div>
