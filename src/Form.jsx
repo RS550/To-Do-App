@@ -1,4 +1,5 @@
 import {nanoid} from 'nanoid';      //used to produce unique task id values
+import React, {useState} from 'react';
 
 function Form({tasks, setTasks}){
 
@@ -16,6 +17,7 @@ function Form({tasks, setTasks}){
             title: value,       //contents of the textbox
             id: nanoid(),       //produces unique task id value
             isCompleted: false, //for tracking completed tasks
+            priority: null
         };
 
         //update the React state by producing new array with new task included
@@ -43,5 +45,7 @@ function Form({tasks, setTasks}){
         </form>
     );
 }
+
+
 
 export default Form;
