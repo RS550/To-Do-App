@@ -9,7 +9,6 @@ function NavBar({ showPet, setShowPet }) {
           onChange={() => setShowPet((prev) => !prev)}
         />
         <span className="toggleSlider"></span>
-        <span className="toggleLabel">Pet View</span>
         <button className='completed-tasks'>Done</button>
         <button className='top-three'>Priority</button>
       </label>

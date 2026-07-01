@@ -47,30 +47,6 @@ header h1 {
   font-weight: 700;
 }
 
-<<<<<<< Updated upstream
-header button {
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-header button:active {
-  transform: scale(0.97);
-}
-
-.focus {
-  background-color: var(--c3);
-  color: var(--c1);
-}
-
-.focus:hover {
-  background-color: var(--c4);
-}
-
-=======
 /* ===== NavBar ===== */
 .navBar {
   grid-area: navbar;
@@ -129,7 +105,6 @@ header button:active {
   color: #ffffff;
 }
  
->>>>>>> Stashed changes
 .petView {
   background-color: var(--c3);
   color: var(--c1);
@@ -155,20 +130,7 @@ header button:active {
   
 }
 
-<<<<<<< Updated upstream
-@media (max-width: 800px) {
-  .two-column {
-    grid-template-columns: 1fr 1fr;
-  }
-  .card {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (max-width: 500px) {
-=======
 @media (max-width: 900px) {
->>>>>>> Stashed changes
   .two-column {
     grid-template-rows: auto auto;
     grid-template-areas:

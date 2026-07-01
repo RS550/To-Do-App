@@ -4,16 +4,14 @@ import Form from './Form.jsx';
 import Header from './Header.jsx';
 import TaskTracking from './TaskTracking.jsx';
 import TaskList from './TaskList';
+import NavBar from './NavBar';
 import Card from './Card.jsx';
 import DropDownMenu from './DropDownMenu.jsx';
 import './App.css';
 
 function App() {
   const [tasks, setTasks] = useState([]);
-<<<<<<< Updated upstream
-=======
   const [showPet, setShowPet] = useState(true);
->>>>>>> Stashed changes
  
 
  // Load from localStorage
@@ -36,14 +34,6 @@ function App() {
       <Header />
 
       <div className='two-column'>
-<<<<<<< Updated upstream
-      <Card className='pet' />
-      <div className="sub-Column"> 
-        <TaskTracking className='task-tracking' tasksCompleted={tasksCompleted} tasksTotal={tasksTotal} />
-        <Form className='form' tasks={tasks} setTasks={setTasks} />
-      </div>
-      
-=======
         {showPet && <Card className='pet' />}
 
         <div className="sub-Column">
@@ -55,16 +45,11 @@ function App() {
           <Form className='form' tasks={tasks} setTasks={setTasks} />
           
         </div>
->>>>>>> Stashed changes
       </div>
       <TaskList tasks={tasks} setTasks={setTasks} />
     </div>
   );   
 }
 
-<<<<<<< Updated upstream
-export default App
-=======
 
 export default App;
->>>>>>> Stashed changes
