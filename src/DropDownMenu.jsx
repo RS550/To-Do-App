@@ -1,8 +1,8 @@
 import React from 'react';
 import TaskRanking from './TaskRanking';
-import DatePicker from './DatePicker.jsx';
 
 //Component from mui
+//For drop down menu
 import Accordion from '@mui/material/Accordion';
 import AccordionActions from '@mui/material/AccordionActions';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -10,6 +10,11 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
+
+
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
 
@@ -49,10 +54,14 @@ function DropDownMenu({tasks, setTasks}) {
                 </AccordionSummary>
                 <AccordionDetails>
                     <p className='ranking'>Priority</p>
-                        <TaskRanking rank={rank} setRank={setRank} ></TaskRanking>
+                    <TaskRanking rank={rank} setRank={setRank} ></TaskRanking>
+
+                    <div className='spacer' />
 
                     <p className='due-date'>Due Date</p>
-                    <DatePicker ></DatePicker>
+                     <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker />
+                    </LocalizationProvider>
         </AccordionDetails>
 
         </Accordion>

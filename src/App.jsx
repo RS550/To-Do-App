@@ -7,7 +7,6 @@ import TaskList from './TaskList';
 import ShowPetToggle from './ShowPetToggle';
 import Card from './Card.jsx';
 import DropDownMenu from './DropDownMenu.jsx';
-import DatePicker from './DatePicker.jsx';
 import './App.css';
 
 function App() {
