@@ -1,6 +1,18 @@
 import DatePicker from './DatePicker.jsx';
+import React from 'react';
+//Component from mui
+import Accordion from '@mui/material/Accordion';
+import AccordionActions from '@mui/material/AccordionActions';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Button from '@mui/material/Button';
+
 
 function DropDownMenu({tasks, setTasks}) {
+    const id= React.useId();
+
     const handleSubmit = (event) => {
         event.target.reset();
     }
@@ -22,8 +34,18 @@ function DropDownMenu({tasks, setTasks}) {
 
     return (
         <>
-        <div>Datepicker placeholder</div>
-        <DatePicker></DatePicker>
+        <Accordion>
+            <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls={`${id}-panel1-content`}
+          id={`${id}-panel1-header`}
+        >
+          <Typography component="span">Advanced</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+
+         <div>Due Date</div>
+        <DatePicker ></DatePicker>
 
         <p>Priority</p>
         <button onClick={setImportance} priority={1}>1</button>
@@ -31,6 +53,9 @@ function DropDownMenu({tasks, setTasks}) {
         <button onClick={setImportance} priority={3}>3</button>
         <button onClick={setImportance} priority={4}>4</button>
         <button onClick={setImportance} priority={5}>5</button>
+        </AccordionDetails>
+
+        </Accordion>
         </>
     );
 

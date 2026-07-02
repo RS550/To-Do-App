@@ -1,19 +1,19 @@
-function NavBar({ showPet, setShowPet }) {
+import CustomTabPanel from './CustomTabPanel.jsx';
 
-    return (
-    <nav className="navBar">
+function ShowPetToggle({ showPet, setShowPet }) {
+  return (
+    <nav className="show-pet">
       <label className="toggleSwitch">
         <input
           type="checkbox"
           checked={!showPet}
           onChange={() => setShowPet((prev) => !prev)}
         />
+        <p>{showPet ? "Hide Blueberry" : "Show Blueberry"}</p>
         <span className="toggleSlider"></span>
-        <button className='completed-tasks'>Done</button>
-        <button className='top-three'>Priority</button>
       </label>
     </nav>
   );
 }
 
-export default NavBar;
+export default ShowPetToggle;
