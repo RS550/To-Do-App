@@ -6,8 +6,6 @@ import TaskTracking from './TaskTracking.jsx';
 import TaskList from './TaskList';
 import ShowPetToggle from './ShowPetToggle';
 import Card from './Card.jsx';
-import DropDownMenu from './DropDownMenu.jsx';
-import DatePicker from './DatePicker.jsx';
 import './App.css';
 
 function App() {
@@ -38,14 +36,14 @@ function App() {
         {showPet && <Card className='pet' />}
 
         <div className="sub-Column">
-          <h1>Test Version</h1>
+          <h1>Task Creation:</h1>
           
           <TaskTracking className='task-stats' tasksCompleted={tasksCompleted} tasksTotal={tasksTotal} limit={1} />
           
           <Form className='form' tasks={tasks} setTasks={setTasks} />
          
           <ShowPetToggle showPet={showPet} setShowPet={setShowPet} />
-          <DropDownMenu></DropDownMenu>
+
           
         </div>
       </div>

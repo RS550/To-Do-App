@@ -3,18 +3,17 @@ import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 
-function TaskRanking(){
-    const [value, setValue] = React.useState(2);
+function TaskRanking({ rank, setRank }){
 
 return (
     <Box sx={{ '& > legend': { mt: 2 } }}>
       <Rating
         name="simple-controlled"
-        value={value}
+        value={rank}
         onChange={(event, newValue) => {
-          setValue(newValue);
+          setRank(newValue);
         }}
-      />
+         />
 
     </Box>
   );

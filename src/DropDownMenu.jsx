@@ -1,8 +1,9 @@
 import React from 'react';
+import dayjs from 'dayjs';
 import TaskRanking from './TaskRanking';
-import DatePicker from './DatePicker.jsx';
 
 //Component from mui
+//For drop down menu
 import Accordion from '@mui/material/Accordion';
 import AccordionActions from '@mui/material/AccordionActions';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -12,47 +13,47 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
 
 
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
-function DropDownMenu({tasks, setTasks}) {
-    const [rank, setRank] = React.useState(2);
+
+
+function DropDownMenu({priority, setPriority, dueDate, setDueDate}) {
     const id= React.useId();
 
-    const handleSubmit = (event) => {
-        event.target.reset();
-    }
-
-    function addTaskInfo(event){
-        //update the React state by producing new array with new task included
-        setTasks((prevTasks) => [...prevTasks, newTask]);
-
-        //save the tasklist to local storage
-        const updatedTaskList = JSON.stringify([...tasks,newTask]);
-        localStorage.setItem('tasks', updatedTaskList);
-
-        event.target.reset();   //clear textbox for next task
-    };
-
-    function setImportance(event){
-        setItem('tasks', priority);
-    }
+    const handleDropDownSubmit = "";
 
     return (
         <>
-        <Accordion>
+        <Accordion className='accordion'>
             <AccordionSummary
+            className='dropCover'
             expandIcon={<ExpandMoreIcon />}
             aria-controls={`${id}-panel1-content`}
             id={`${id}-panel1-header`}
             >
-                <Typography component="span">More Info</Typography>
+                <Typography ></Typography>
                 </AccordionSummary>
-                <AccordionDetails>
+                <AccordionDetails className='drop-menu'>
                     <p className='ranking'>Priority</p>
-                        <TaskRanking rank={rank} setRank={setRank} ></TaskRanking>
+                    <TaskRanking rank={priority} setRank={setPriority} onChange={(newValue) =>
+                                setPriority(newValue)
+                            }></TaskRanking>
+
+                    <div className='spacer' />
 
                     <p className='due-date'>Due Date</p>
-                    <DatePicker ></DatePicker>
+                     <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            value={dueDate ? dayjs(dueDate) : null}
+                            onChange={(newValue) =>
+                                setDueDate(newValue ? newValue.toISOString() : null)
+                            }
+                        />
+                    </LocalizationProvider>
+                    
         </AccordionDetails>
 
         </Accordion>
