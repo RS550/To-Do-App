@@ -2,8 +2,7 @@ function TaskTracking({ tasksCompleted, tasksTotal }) {
   return (
     <section className="taskStats">
       <div>
-        <p>Completed: {tasksCompleted}</p>
-        <p>Total: {tasksTotal}</p>
+        <p>Current Progress: {tasksCompleted}/{tasksTotal}</p>
       </div>
     </section>
   );
