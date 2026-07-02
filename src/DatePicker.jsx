@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const CUR_YEAR = new Date().getFullYear();
 const CUR_MONTH = new Date().getMonth() + 1;
 const YEARS_RANGE = 21;
@@ -119,6 +120,7 @@ function DatePicker({onDateSelected}) {
       </select>
 
       <label htmlFor="month">Month:</label>
+      
       <select
         id="month"
         value={month}
@@ -130,12 +132,25 @@ function DatePicker({onDateSelected}) {
           </option>
         ))}
       </select>
+     <input type="text" readOnly placeholder="Selected date" value={selectedDate} />
 
       {createCalendar(year, month, selectedDate, onHandleSelectedDate)}
-
-      <input type="text" readOnly placeholder="Selected date" value={selectedDate} />
     </div>
   );
 }
 
 export default DatePicker;
+
+
+
+function ControlledComponent() {
+  const [value, setValue] = React.useState(null);
+
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DemoContainer components={['DatePicker']}>
+        <DatePicker value={value} onChange={(newValue) => setValue(newValue)} />
+      </DemoContainer>
+    </LocalizationProvider>
+  );
+}

@@ -56,7 +56,6 @@ header h1 {
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 24px;
-  color: white;
 }
  
 /* Toggle switch for showing/hiding the pet card */
@@ -259,6 +258,11 @@ header h1 {
 
 .dropDown:hover {
   text-decoration: underline;
+}
+
+/* ===== Date Picker===== */
+.datePicker {
+  background-color: pink;
 }
 
 /* ===== Task List ===== */
