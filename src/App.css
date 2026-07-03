@@ -1,6 +1,6 @@
 /* ===== Preset Colors ===== */
 :root {
-    --c8: #0f0c1d;
+    --c8: #a69bdfa8;
     --c7: #201647e7;
     --c6: #3a2c70;
     --c5: #3a2c70b1;
@@ -63,63 +63,16 @@ header h1 {
   gap: 12px;
   margin-bottom: 24px;
 }
- 
-/* Toggle switch for showing/hiding the pet card */
-.toggleSwitch {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  user-select: none;
-}
- 
-.toggleSwitch input {
-  display: none;
-}
- 
-.toggleSlider {
-  position: relative;
-  width: 40px;
-  height: 22px;
-  background-color:var(--c0);
-  border-radius: 999px;
-  transition: background-color 0.2s ease;
-}
- 
-.toggleSlider::before {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 18px;
-  height: 18px;
-  background-color: var(--c2);
-  border-radius: 50%;
-  transition: transform 0.2s ease;
-}
- 
-.toggleSwitch input:checked + .toggleSlider {
-  background-color: var(--c5);
-}
- 
-.toggleSwitch input:checked + .toggleSlider::before {
-  transform: translateX(18px);
-}
- 
-.toggleLabel {
-  font-size: 0.85rem;
-}
-
 
 /* ===== Two Column Layout (Pet + Stats + Form) ===== */
 .two-column {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-areas:
-    "pet navbar"
+    "pet taskCreation"
     "pet  sub";
   gap: 6px;
-  margin-bottom: 32px;
+  margin-bottom: 15px;
   align-items: stretch;
   padding: 50px;
   border-top: 6px dotted var(--c3);
@@ -131,10 +84,33 @@ header h1 {
   .two-column {
     grid-template-rows: auto auto;
     grid-template-areas:
-      "navbar"
+      "taskCreation"
       "sub";
   }
 }
+
+/* ===== NavBar ===== */
+.navBar{
+  color: var(--c6) !important;
+  border-bottom: 5px solid var(--c0);
+  margin-bottom: 15px;
+}
+
+.nav-tab-0{
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+}
+
+.nav-tab-1{
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+}
+
+.nav-tab-2{
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+}
+
 
 /* ===== Pet Card ===== */
 .card {
@@ -177,7 +153,7 @@ header h1 {
 
 .sub-Column {
   margin-top: 10px;;
-  grid-area: navbar;
+  grid-area: taskCreation;
   align-items: center;
   justify-content: center;
   padding: 20;
@@ -220,7 +196,7 @@ header h1 {
   border:none;
   border-radius: 8px;
   font-size: 0.95rem;
-  color: var(--c8);
+  color: var(--c7);
   background-color: var(--c1);
 }
 
@@ -254,11 +230,35 @@ header h1 {
   box-shadow: none !important;
 }
 
-.spacer{
-  height: 20px;
+.drop-menu {
+  border-radius: 10px;
+  background-color: var(--c8) !important;
 }
 
+.spacer{
+  height: 20px;
+  
+}
 
+/* ===== Video Display ===== */
+.video-box {
+  max-height: 515px;
+  background-color: black;
+  border-radius: 16px;
+  border: 6px solid black;
+  box-shadow: 0 2px 8px var(--c4);
+}
+
+.iframe {
+  width:750px;
+  height: 505px;
+  max-width: 760px;
+  max-height: 515px;
+}
+
+.video-hidden {
+  display: none;
+}
 
 /* ===== Task List ===== */
 .taskList {
@@ -327,18 +327,13 @@ header h1 {
 }
 
 .sortControls {
-  margin-left: 60px;
-  border-radius: 8px !important;
-  background-color: var(--c0) !important;
-  border: 3px solid var(--c2) !important;  
-}
-
-.sortControls::selection {
-  background-color: var(--c2) !important;
+  margin: 0px 60px 30px 0px;
+  border-top: 3px solid var(--c2) !important; 
 }
 
 .manualB {
- border: none !important;
+  border-bottom-left-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
 }
 .priorityB {
   border-left: 3px dotted var(--c1) !important;

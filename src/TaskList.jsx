@@ -2,12 +2,35 @@ import React from 'react';
 import { useState, useMemo } from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Button from '@mui/material/Button';
+import Rating from '@mui/material/Rating';
+
+// Shared styling so the sort ToggleButtons and the Export/Import Buttons
+// all match NavBar's tab look: no default MUI blue, a var(--c8) background
+// highlight instead (on the selected sort option, and on hover for the
+// plain action buttons).
+const toggleSx = {
+  '&.Mui-selected': {
+    backgroundColor: '#cac0f5',
+              color:'#43139e',
+  },
+};
+
+const actionButtonSx = {
+  marginTop:'5px',
+  color: 'inherit',
+  border:'none',
+  '&:hover': {
+    backgroundColor: 'var(--c8)',
+  },
+};
 
 
 // from array of tasks, produces ordered list of tasks
 function TaskList({tasks, setTasks}) {
   const dragItem = React.useRef(null);
   const dragOverItem = React.useRef(null);
+  const fileInputRef = React.useRef(null);
 
   //'manual' = user's drag-and-drop order, otherwise sorted on the fly for display
   const [sortBy, setSortBy] = useState('manual');
@@ -22,6 +45,49 @@ function TaskList({tasks, setTasks}) {
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
+  //downloads the current task list as a JSON file the user can save/share
+  const handleExport = () => {
+    const dataStr = JSON.stringify(tasks, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'tasks.json';
+    link.click();
+
+    URL.revokeObjectURL(url);
+  };
+
+  //the actual <input type="file"> is hidden; this button just triggers it
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  //reads the chosen JSON file and replaces the current task list with it
+  const handleImportChange = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const importedTasks = JSON.parse(e.target.result);
+        if (!Array.isArray(importedTasks)) {
+          throw new Error('Imported file is not a task list');
+        }
+        setTasks(importedTasks);
+        localStorage.setItem('tasks', JSON.stringify(importedTasks));
+      } catch (err) {
+        console.error('Failed to import tasks:', err);
+      }
+    };
+    reader.readAsText(file);
+
+    //reset so importing the same filename again still fires onChange
+    event.target.value = null;
+  };
+
   //derives a sorted copy for display without touching the underlying
   //tasks array/localStorage, so the user's manual drag order isn't lost
   //when they switch back to it
@@ -31,10 +97,13 @@ function TaskList({tasks, setTasks}) {
     if (sortBy === 'priority') {
       return [...tasks].sort((a, b) => {
         //tasks without a priority sink to the bottom
-        if (a.priority == null && b.priority == null) return 0;
-        if (a.priority == null) return 1;
-        if (b.priority == null) return -1;
-        return a.priority - b.priority;
+        //Number(...) guards against priority having been saved as a string
+        const aPriority = a.priority == null ? null : Number(a.priority);
+        const bPriority = b.priority == null ? null : Number(b.priority);
+        if (aPriority == null && bPriority == null) return 0;
+        if (aPriority == null) return 1;
+        if (bPriority == null) return -1;
+        return aPriority - bPriority;
       });
     }
 
@@ -61,24 +130,64 @@ function TaskList({tasks, setTasks}) {
 
   return (
     <>
-      <ToggleButtonGroup
-        className="sortControls"
-        value={sortBy}
-        exclusive
-        onChange={handleSortByChange}
-        aria-label="sort tasks by"
-        size="small"
-      >
-        <ToggleButton className='manualB' value="manual" aria-label="manual order">
-          Manual
-        </ToggleButton>
-        <ToggleButton className='priorityB' value="priority" aria-label="sort by priority">
-          Priority
-        </ToggleButton>
-        <ToggleButton className='dueB' value="dueDate" aria-label="sort by due date">
-          Due Date
-        </ToggleButton>
-      </ToggleButtonGroup>
+      <div className="listControls">
+        <ToggleButtonGroup
+          className="sortControls"
+          value={sortBy}
+          exclusive
+          onChange={handleSortByChange}
+          aria-label="sort tasks by"
+          size="small"
+        >
+          <ToggleButton className='manualB' value="Auto" aria-label="manual order" sx={toggleSx}>
+            Manual
+          </ToggleButton>
+          <ToggleButton className='priorityB' value="priority" aria-label="sort by priority" sx={toggleSx}>
+            Ranked
+          </ToggleButton>
+          <ToggleButton className='dueB' value="dueDate" aria-label="sort by due date" sx={toggleSx}>
+            Deadlines
+          </ToggleButton>
+          <div className="listActions">
+          <Button
+            className="exportButton"
+            variant="outlined"
+            size="small"
+            onClick={handleExport}
+            sx={actionButtonSx}
+          >
+            Export
+          </Button>
+          <Button
+            className="functionButton"
+            variant="outlined"
+            size="small"
+            onClick={handleImportClick}
+            sx={actionButtonSx}
+          >
+            Import
+          </Button>
+          <input
+            type="file"
+            className="functionButton"
+            accept="application/json"
+            ref={fileInputRef}
+            onChange={handleImportChange}
+            style={{ display: 'none' }}
+          />
+        </div>
+        </ToggleButtonGroup>
+        <div>
+
+          <input
+            type="file"
+            accept="application/json"
+            ref={fileInputRef}
+            onChange={handleImportChange}
+            style={{ display: 'none' }}
+          />
+        </div>
+      </div>
 
       <ul className="taskList">
         {sortedTasks && sortedTasks.length > 0 ? (
@@ -203,7 +312,14 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
             {item?.title}
           </p>
           {item.priority != null && (
-            <span className="taskPriority">Priority: {item.priority}</span>
+            //localStorage/JSON as a string, and Rating's value prop needs
+            //a number to know how many stars to fill in.
+            <Rating
+              className="taskPriority"
+              value={Number(item.priority)}
+              readOnly
+              size="small"
+            />
           )}
           {item.dueDate && (
             <span className="taskDueDate">

@@ -34,7 +34,7 @@ function DropDownMenu({priority, setPriority, dueDate, setDueDate}) {
             aria-controls={`${id}-panel1-content`}
             id={`${id}-panel1-header`}
             >
-                <Typography ></Typography>
+                <p>More Information</p>
                 </AccordionSummary>
                 <AccordionDetails className='drop-menu'>
                     <p className='ranking'>Priority</p>
