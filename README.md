@@ -1,16 +1,110 @@
-# React + Vite
+# 🫐 Blueberries To-Do List
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A React + Vite to-do app with task prioritization, due dates, drag-and-drop reordering, and a virtual pet companion to keep you company while you work.
 
-Currently, two official plugins are available:
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![MUI](https://img.shields.io/badge/MUI-9-007FFF?logo=mui&logoColor=white)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## React Compiler
+<img width="2000" height="2002" alt="BlueberryList" src="https://github.com/user-attachments/assets/7f42b6d1-612d-4d43-8c55-40aa94302f2a" />
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+🔗 Live demo: blueberries-to-do-app.vercel.app
 
-## Expanding the Oxlint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+- **Task creation** with an optional priority rating (1–5 stars) and due date, tucked behind an expandable "More Information" panel
+- **Progress tracking** showing completed vs. total tasks
+- **Flexible sorting** — switch between manual (drag-and-drop) order, priority, or due date without losing your original ordering
+- **Inline editing** — double-click a task to rename it
+- **Import / export** your task list as JSON, for backups or moving between devices
+- **Persistent storage** — tasks are saved to `localStorage`, so your list survives a page refresh
+- **Three views** via the nav bar:
+  - **Blueberry** — task creation alongside a pet companion card
+  - **List** — a focused task-creation view (no pet) plus the full task list below
+  - **Lofi** — an embedded lofi video for background listening while you work
+
+## Tech Stack
+
+- [React 19](https://react.dev/)
+- [Vite](https://vitejs.dev/) — dev server & bundler
+- [MUI (Material UI)](https://mui.com/) — Accordion, Tabs, ToggleButtons, Rating, DatePicker
+- [dayjs](https://day.js.org/) — date handling for the due date picker
+- [nanoid](https://github.com/ai/nanoid) — unique task IDs
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18 or later recommended)
+- npm
+
+### Installation
+
+```bash
+git clone https://github.com/<your-username>/to-do-app.git
+cd to-do-app
+npm install
+```
+
+### Development
+
+Start the local dev server:
+
+```bash
+npm run dev
+```
+
+Then open the URL Vite prints (typically `http://localhost:5173`).
+
+### Build for production
+
+```bash
+npm run build
+```
+
+Output is generated in the `dist/` folder. Preview the production build locally with:
+
+```bash
+npm run preview
+```
+
+### Linting
+
+```bash
+npm run lint
+```
+
+## Project Structure
+
+```
+src/
+├── App.jsx            # Top-level layout and tab/view logic
+├── Header.jsx         # Page header
+├── NavBar.jsx         # Tab navigation (Blueberry / List / Lofi)
+├── Card.jsx           # Pet companion card
+├── Form.jsx           # New task input + submit handling
+├── DropDownMenu.jsx   # Expandable panel for priority + due date
+├── TaskRanking.jsx    # Star-rating priority selector
+├── TaskTracking.jsx   # Completed/total task counter
+├── TaskList.jsx       # Renders, sorts, edits, and reorders tasks
+├── ShowPetToggle.jsx  # Legacy pet visibility toggle
+└── styleSheet.css     # Global styles
+```
+
+## Usage
+
+1. Type a task into the input box and hit **+** to add it.
+2. Optionally expand **More Information** to set a priority (star rating) and due date before submitting.
+3. Use the sort controls above the task list to view tasks in manual, priority, or due-date order.
+4. Double-click a task to edit its title; check the box to mark it complete; click **X** to delete it.
+5. Use **Export**/**Import** to save or load your task list as a JSON file.
+
+## Known Issues / Roadmap
+
+- Large production bundle due to MUI + Emotion + date libraries being bundled together — chunk splitting is planned.
+- `ShowPetToggle.jsx` is a legacy component from before the tab-based nav; slated for removal.
+
+## License
+
+[MIT](LICENSE)
