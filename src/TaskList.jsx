@@ -5,23 +5,27 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Button from '@mui/material/Button';
 import Rating from '@mui/material/Rating';
 
-// Shared styling so the sort ToggleButtons and the Export/Import Buttons
-// all match NavBar's tab look: no default MUI blue, a var(--c8) background
-// highlight instead (on the selected sort option, and on hover for the
-// plain action buttons).
+
 const toggleSx = {
   '&.Mui-selected': {
-    backgroundColor: '#cac0f5',
-              color:'#43139e',
+    borderColor:'none',
+    backgroundColor: '#8573d3',
+    color:'#cac0f5',
+    '&:selected':{
+      borderColor:'#cac0f5',
+    }
   },
 };
 
 const actionButtonSx = {
-  marginTop:'5px',
+  color:'#cac0f5',
+  padding:'5px',
+  marginTop:'3px',
   color: 'inherit',
   border:'none',
   '&:hover': {
-    backgroundColor: 'var(--c8)',
+    backgroundColor: '#7160c1',
+    color: '#cac0f5',
   },
 };
 
@@ -151,7 +155,7 @@ function TaskList({tasks, setTasks}) {
           <div className="listActions">
           <Button
             className="exportButton"
-            variant="outlined"
+            
             size="small"
             onClick={handleExport}
             sx={actionButtonSx}
@@ -160,7 +164,7 @@ function TaskList({tasks, setTasks}) {
           </Button>
           <Button
             className="functionButton"
-            variant="outlined"
+            
             size="small"
             onClick={handleImportClick}
             sx={actionButtonSx}
@@ -188,6 +192,7 @@ function TaskList({tasks, setTasks}) {
           />
         </div>
       </div>
+      <div className='borderLine'></div>
 
       <ul className="taskList">
         {sortedTasks && sortedTasks.length > 0 ? (
