@@ -1,19 +1,32 @@
 import React from 'react';
 import { useState, useMemo } from 'react';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Rating from '@mui/material/Rating';
 
 
-const toggleSx = {
+//labels shown for each sortBy value, both on the dropdown trigger button
+//and as the selectable options inside the menu
+const sortOptions = [
+  { value: 'manual', label: 'Manual' },
+  { value: 'priority', label: 'Ranked' },
+  { value: 'dueDate', label: 'Deadlines' },
+  { value: 'completed', label: 'Completed' },
+];
+
+const sortMenuItemSx = {
   '&.Mui-selected': {
-    borderColor:'none',
     backgroundColor: '#8573d3',
-    color:'#cac0f5',
-    '&:selected':{
-      borderColor:'#cac0f5',
-    }
+    color: '#cac0f5',
+    '&:hover': {
+      backgroundColor: '#7160c1',
+    },
   },
 };
 
@@ -34,10 +47,17 @@ const actionButtonSx = {
 function TaskList({tasks, setTasks}) {
   const dragItem = React.useRef(null);
   const dragOverItem = React.useRef(null);
-  const fileInputRef = React.useRef(null);
 
   //'manual' = user's drag-and-drop order, otherwise sorted on the fly for display
   const [sortBy, setSortBy] = useState('manual');
+
+  //controls the sort dropdown menu (replaces the old ToggleButtonGroup)
+  const [sortMenuAnchor, setSortMenuAnchor] = useState(null);
+  const sortMenuOpen = Boolean(sortMenuAnchor);
+
+  //independent of sortBy: whether completed tasks are visible at all.
+  //e.g. lets you hide completed tasks while still sorting by priority/due date.
+  const [showCompleted, setShowCompleted] = useState(true);
 
   const handleSort = () => {
     const updatedTasks = [...tasks];
@@ -49,48 +69,7 @@ function TaskList({tasks, setTasks}) {
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
-  //downloads the current task list as a JSON file the user can save/share
-  const handleExport = () => {
-    const dataStr = JSON.stringify(tasks, null, 2);
-    const blob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'tasks.json';
-    link.click();
-
-    URL.revokeObjectURL(url);
-  };
-
-  //the actual <input type="file"> is hidden; this button just triggers it
-  const handleImportClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  //reads the chosen JSON file and replaces the current task list with it
-  const handleImportChange = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const importedTasks = JSON.parse(e.target.result);
-        if (!Array.isArray(importedTasks)) {
-          throw new Error('Imported file is not a task list');
-        }
-        setTasks(importedTasks);
-        localStorage.setItem('tasks', JSON.stringify(importedTasks));
-      } catch (err) {
-        console.error('Failed to import tasks:', err);
-      }
-    };
-    reader.readAsText(file);
-
-    //reset so importing the same filename again still fires onChange
-    event.target.value = null;
-  };
+  //downloads/imports moved to the Settings tab (see Settings.jsx)
 
   //derives a sorted copy for display without touching the underlying
   //tasks array/localStorage, so the user's manual drag order isn't lost
@@ -121,92 +100,122 @@ function TaskList({tasks, setTasks}) {
       });
     }
 
+    if (sortBy === 'completed') {
+      //only show tasks that are marked done, in their existing manual order
+      return tasks.filter((task) => task.isCompleted);
+    }
+
     return tasks; //manual order
   }, [tasks, sortBy]);
 
-  const handleSortByChange = (event, newSortBy) => {
-    //ToggleButtonGroup passes null if the active button is clicked again;
-    //ignore that so there's always a selection
-    if (newSortBy !== null) {
-      setSortBy(newSortBy);
-    }
+  //layers the independent show/hide-completed toggle on top of whatever
+  //sortedTasks produced, without touching the underlying tasks array.
+  //In the 'completed' sort view the toggle no longer hides anything (every
+  //item there is already completed, so hiding would just empty the list) -
+  //instead it controls whether the strikethrough style is shown, below.
+  const visibleTasks = useMemo(() => {
+    if (!sortedTasks) return sortedTasks;
+    if (sortBy === 'completed') return sortedTasks;
+    if (showCompleted) return sortedTasks;
+    return sortedTasks.filter((task) => !task.isCompleted);
+  }, [sortedTasks, showCompleted, sortBy]);
+
+  const handleSortMenuOpen = (event) => {
+    setSortMenuAnchor(event.currentTarget);
+  };
+
+  const handleSortMenuClose = () => {
+    setSortMenuAnchor(null);
+  };
+
+  const handleSortSelect = (newSortBy) => {
+    setSortBy(newSortBy);
+    handleSortMenuClose();
+  };
+
+  const handleToggleShowCompleted = () => {
+    setShowCompleted((prev) => !prev);
   };
 
   return (
     <>
       <div className="listControls">
-        <ToggleButtonGroup
-          className="sortControls"
-          value={sortBy}
-          exclusive
-          onChange={handleSortByChange}
+        <Button
+          className="sortDropdownButton"
           aria-label="sort tasks by"
+          aria-controls={sortMenuOpen ? 'sort-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={sortMenuOpen ? 'true' : undefined}
           size="small"
+          endIcon={<ArrowDropDownIcon />}
+          onClick={handleSortMenuOpen}
+          sx={actionButtonSx}
         >
-          <ToggleButton className='manualB' value="Auto" aria-label="manual order" sx={toggleSx}>
-            Manual
-          </ToggleButton>
-          <ToggleButton className='priorityB' value="priority" aria-label="sort by priority" sx={toggleSx}>
-            Ranked
-          </ToggleButton>
-          <ToggleButton className='dueB' value="dueDate" aria-label="sort by due date" sx={toggleSx}>
-            Deadlines
-          </ToggleButton>
-          <div className="listActions">
-          <Button
-            className="exportButton"
-            
-            size="small"
-            onClick={handleExport}
-            sx={actionButtonSx}
-          >
-            Export
-          </Button>
-          <Button
-            className="functionButton"
-            
-            size="small"
-            onClick={handleImportClick}
-            sx={actionButtonSx}
-          >
-            Import
-          </Button>
-          <input
-            type="file"
-            className="functionButton"
-            accept="application/json"
-            ref={fileInputRef}
-            onChange={handleImportChange}
-            style={{ display: 'none' }}
-          />
-        </div>
-        </ToggleButtonGroup>
-        <div>
+          Sort by
+        </Button>
+        <Menu
+          id="sort-menu"
+          anchorEl={sortMenuAnchor}
+          open={sortMenuOpen}
+          onClose={handleSortMenuClose}
+        >
+          {sortOptions.map((option) => (
+            <MenuItem
+              key={option.value}
+              className={`${option.value}B`}
+              selected={sortBy === option.value}
+              onClick={() => handleSortSelect(option.value)}
+              sx={sortMenuItemSx}
+            >
+              {option.label}
+            </MenuItem>
+          ))}
+        </Menu>
 
-          <input
-            type="file"
-            accept="application/json"
-            ref={fileInputRef}
-            onChange={handleImportChange}
-            style={{ display: 'none' }}
-          />
-        </div>
+        <Tooltip
+          title={
+            sortBy === 'completed'
+              ? (showCompleted ? "Hide strikethrough on completed tasks" : "Show strikethrough on completed tasks")
+              : (showCompleted ? "Hide completed tasks" : "Show completed tasks")
+          }
+        >
+          <IconButton
+            className="showCompletedToggle"
+            aria-pressed={showCompleted}
+            aria-label={
+              sortBy === 'completed'
+                ? (showCompleted ? "Hide strikethrough on completed tasks" : "Show strikethrough on completed tasks")
+                : (showCompleted ? "Hide completed tasks" : "Show completed tasks")
+            }
+            size="small"
+            onClick={handleToggleShowCompleted}
+            sx={actionButtonSx}
+          >
+            {showCompleted ? <VisibilityIcon fontSize="small" /> : <VisibilityOffIcon fontSize="small" />}
+          </IconButton>
+        </Tooltip>
       </div>
       <div className='borderLine'></div>
 
       <ul className="taskList">
-        {sortedTasks && sortedTasks.length > 0 ? (
-          sortedTasks.map((item, index) => (
+        {visibleTasks && visibleTasks.length > 0 ? (
+          visibleTasks.map((item) => (
             <Item
               key={item.id}
               item={item}
               tasks={tasks}
               setTasks={setTasks}
-              index={index}
+              //looked up against the underlying (unfiltered/unsorted) tasks
+              //array so drag-and-drop reordering stays correct even when
+              //showCompleted or a non-manual sort has changed what's visible
+              index={tasks.findIndex((t) => t.id === item.id)}
               dragItem={dragItem}
               dragOverItem={dragOverItem}
               handleSort={handleSort}
               draggingEnabled={sortBy === 'manual'}
+              //in the Completed view, showCompleted=false means "don't
+              //strike through" rather than "hide" - see visibleTasks above
+              suppressStrikethrough={sortBy === 'completed' && !showCompleted}
             />
           ))
         ) : (
@@ -219,7 +228,7 @@ function TaskList({tasks, setTasks}) {
 
 
 //Child of TaskList, renders each task as an Item
-function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort, draggingEnabled }) {
+function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort, draggingEnabled, suppressStrikethrough }) {
   //Tracks if Item is in edit mode
   const [editing, setEditing] = React.useState(false);
   //When edit mode active directs input to Item
@@ -313,7 +322,7 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
             onChange={completeTask}
             onDoubleClick={(e) => e.stopPropagation()} //prevent the editing double clock from checking box
           />
-          <p style={item.isCompleted ? { textDecoration: "line-through" } : {}}>
+          <p style={item.isCompleted && !suppressStrikethrough ? { textDecoration: "line-through" } : {}}>
             {item?.title}
           </p>
           {item.priority != null && (

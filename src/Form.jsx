@@ -1,6 +1,9 @@
 import {nanoid} from 'nanoid';      //used to produce unique task id values
 import React, {useState} from 'react';
-import DropDownMenu from './DropDownMenu';
+//Lazy-load is used to manage the chunk file size
+//splitting so that this is loaded when first used reduced the inital load
+import { lazy, Suspense } from 'react';
+const DropDownMenu = lazy(() => import('./DropDownMenu'));
 
 function Form({tasks, setTasks}){
 
@@ -47,30 +50,54 @@ function Form({tasks, setTasks}){
         console.log({value},{priority},{dueDate});
     };
 
+        const handleTaskInputChange = (event) => {
+        const input = event.target;
+        const { value, selectionStart, selectionEnd } = input;
+ 
+        if (value.length > 0 && /[a-z]/.test(value[0])) {
+            input.value = value[0].toUpperCase() + value.slice(1);
+            input.setSelectionRange(selectionStart, selectionEnd);
+        }
+    };
     return (
         <form className='form' onSubmit={handleSubmit}>
-            <label htmlFor="task">
-                <input
-                type="text"
-                name="task"
-                id="task"
-                placeholder="What is next?"
-                />
+            <div className='inputRow'>
+                <button
+                    type="button"
+                    className="newTask dropDownToggle"
+                    aria-expanded={showDropdown}
+                    aria-controls="task-dropdown-panel"
+                    aria-label={showDropdown ? "Hide more information" : "Show more information"}
+                    onClick={() => setShowDropdown((prev) => !prev)}
+                >
+                    {showDropdown ? '▲' : '▼'}
+                </button>
+ 
+                <label htmlFor="task">
+                    <input
+                    type="text"
+                    name="task"
+                    id="task"
+                    placeholder="What is next?"
+                    onChange={handleTaskInputChange}
+                    />
+                </label>
+ 
                 <button className="newTask">+</button>
-            </label>
-           
-            
-                <DropDownMenu
-                    priority={priority}
-                    setPriority={setPriority}
-                    dueDate={dueDate}
-                    setDueDate={setDueDate}
+            </div>
+           <Suspense fallback={null}>
+            <DropDownMenu
+                open={showDropdown}
+                priority={priority}
+                setPriority={setPriority}
+                dueDate={dueDate}
+                setDueDate={setDueDate}
                 />
-            
+            </Suspense>
         </form>
     );
 }
-
-
-
+ 
+ 
+ 
 export default Form;

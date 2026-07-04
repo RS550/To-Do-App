@@ -18,7 +18,6 @@
     "dayjs": "^1.11.21",
     "nanoid": "^5.1.16",
     "react": "^19.2.7",
-    "react-datepicker": "^9.1.0",
     "react-dom": "^19.2.7"
   },
   "devDependencies": {

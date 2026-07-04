@@ -5,7 +5,9 @@ import Header from './Header.jsx';
 import TaskTracking from './TaskTracking.jsx';
 import TaskList from './TaskList';
 import Card from './Card.jsx';
-import NavBar from './NavBar';
+import NavBar from './NavBar.jsx';
+import Settings from './Settings.jsx';
+import SparkleCelebration from './SparkleCelebration.jsx';
 import './App.css';
 
 function App() {
@@ -29,11 +31,14 @@ function App() {
  const tasksCompleted = tasks.filter(task => task.isCompleted === true).length;
  const tasksTotal = tasks.length;
 
-  // The task-creation column is identical whether or not the pet is showing,
-  // so it's pulled out once and reused by both tab 0 and tab 1.
+ //celebration trigger: more than one task exists, and every one of them is done
+ const allTasksCompleted = tasksTotal > 1 && tasksCompleted === tasksTotal;
+ 
+
+
+  // The task-creation column is identical whether or not the pet is showing
   const taskCreationColumn = (
     <div className="sub-Column">
-      <h1>Task Creation:</h1>
 
       <TaskTracking className='task-stats' tasksCompleted={tasksCompleted} tasksTotal={tasksTotal} limit={1} />
 
@@ -43,9 +48,10 @@ function App() {
 
   return (
     <div className="wrapper">
+      <SparkleCelebration active={allTasksCompleted} />
       <Header />
       <NavBar activeTab={activeTab} setActiveTab={setActiveTab} />
-
+ 
       <div className='two-column'>
         {activeTab === 0 && (
           <>
@@ -53,9 +59,11 @@ function App() {
             {taskCreationColumn}
           </>
         )}
-
+ 
         {activeTab === 1 && taskCreationColumn}
-
+ 
+        {activeTab === 3 && <Settings tasks={tasks} setTasks={setTasks} />}
+ 
                 <div className={`video-box${activeTab === 2 ? '' : ' video-hidden'}`}>
           <iframe
             className="iframe"
@@ -70,11 +78,11 @@ function App() {
           ></iframe>
         </div>
       </div>
-      <TaskList tasks={tasks} setTasks={setTasks} />
+      {activeTab !== 3 && <TaskList tasks={tasks} setTasks={setTasks} />}
     </div>
   );   
 }
-
-
-
+ 
+ 
+ 
 export default App;

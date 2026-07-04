@@ -4,8 +4,6 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
 // activeTab / setActiveTab are lifted up to App so the tab selection can
-// drive which content renders in the two-column area (replaces the old
-// showPet toggle state).
 function NavBar({ activeTab, setActiveTab }) {
   const handleChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -17,8 +15,7 @@ function NavBar({ activeTab, setActiveTab }) {
         value={activeTab}
         onChange={handleChange}
         aria-label="view tabs"
-        // Drop the default blue-underline indicator since the selected
-        // state is now shown via each Tab's background color instead.
+        
         sx={{
           '& .MuiTabs-indicator': {
             display: 'none',
@@ -62,9 +59,23 @@ function NavBar({ activeTab, setActiveTab }) {
             },
           }}
         />
+        <Tab
+          label="Settings"
+          className="nav-tab-3"
+          id="nav-tab-3"
+          aria-controls="nav-tabpanel-3"
+          sx={{
+            '&.Mui-selected': {
+              backgroundColor: '#cac0f5',
+              color:'#43139e',
+            },
+          }}
+        />
       </Tabs>
     </Box>
   );
 }
-
+ 
 export default NavBar;
+ 
+

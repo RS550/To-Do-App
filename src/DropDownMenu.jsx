@@ -3,62 +3,37 @@ import dayjs from 'dayjs';
 import TaskRanking from './TaskRanking';
 
 //Component from mui
-//For drop down menu
-import Accordion from '@mui/material/Accordion';
-import AccordionActions from '@mui/material/AccordionActions';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Button from '@mui/material/Button';
-
+import Collapse from '@mui/material/Collapse';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
-
-
-function DropDownMenu({priority, setPriority, dueDate, setDueDate}) {
-    const id= React.useId();
-
-    const handleDropDownSubmit = "";
-
+function DropDownMenu({ open, priority, setPriority, dueDate, setDueDate }) {
     return (
-        <>
-        <Accordion className='accordion'>
-            <AccordionSummary
-            className='dropCover'
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls={`${id}-panel1-content`}
-            id={`${id}-panel1-header`}
-            >
-                <p>More Information</p>
-                </AccordionSummary>
-                <AccordionDetails className='drop-menu'>
-                    <p className='ranking'>Priority</p>
-                    <TaskRanking rank={priority} setRank={setPriority} onChange={(newValue) =>
-                                setPriority(newValue)
-                            }></TaskRanking>
+        <Collapse in={open} className='accordion' id="task-dropdown-panel">
+            <div className='drop-menu'>
+                <p className='dropDownTitle'>More Information</p>
 
-                    <div className='spacer' />
+                <p className='ranking'>Priority</p>
+                <TaskRanking rank={priority} setRank={setPriority} onChange={(newValue) =>
+                            setPriority(newValue)
+                        }></TaskRanking>
 
-                    <p className='due-date'>Due Date</p>
-                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                            value={dueDate ? dayjs(dueDate) : null}
-                            onChange={(newValue) =>
-                                setDueDate(newValue ? newValue.toISOString() : null)
-                            }
-                        />
-                    </LocalizationProvider>
-                    
-        </AccordionDetails>
+                <div className='spacer' />
 
-        </Accordion>
-        </>
+                <p className='due-date'>Due Date</p>
+                 <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                        value={dueDate ? dayjs(dueDate) : null}
+                        onChange={(newValue) =>
+                            setDueDate(newValue ? newValue.toISOString() : null)
+                        }
+                    />
+                </LocalizationProvider>
+            </div>
+        </Collapse>
     );
-
 }
 export default DropDownMenu;
