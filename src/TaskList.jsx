@@ -139,9 +139,9 @@ function TaskList({tasks, setTasks}) {
 
   return (
     <>
-      <div className="listControls">
+      <div className="list-control">
         <Button
-          className="sortDropdownButton"
+          className="sort-dropdown"
           aria-label="sort tasks by"
           aria-controls={sortMenuOpen ? 'sort-menu' : undefined}
           aria-haspopup="true"
@@ -162,7 +162,6 @@ function TaskList({tasks, setTasks}) {
           {sortOptions.map((option) => (
             <MenuItem
               key={option.value}
-              className={`${option.value}B`}
               selected={sortBy === option.value}
               onClick={() => handleSortSelect(option.value)}
               sx={sortMenuItemSx}
@@ -180,7 +179,7 @@ function TaskList({tasks, setTasks}) {
           }
         >
           <IconButton
-            className="showCompletedToggle"
+            className="show-completed-toggle"
             aria-pressed={showCompleted}
             aria-label={
               sortBy === 'completed'
@@ -197,7 +196,7 @@ function TaskList({tasks, setTasks}) {
       </div>
       <div className='borderLine'></div>
 
-      <ul className="taskList">
+      <ul className="task-list">
         {visibleTasks && visibleTasks.length > 0 ? (
           visibleTasks.map((item) => (
             <Item
@@ -292,7 +291,7 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
 
   return (
     <li id={item?.id}
-        className="taskItem"
+        className="task-item"
         draggable={draggingEnabled}
         onDragStart={() => draggingEnabled && (dragItem.current = index)}
         onDragEnter={() => draggingEnabled && (dragOverItem.current = index)}
@@ -300,7 +299,7 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
         onDragOver={(e) => draggingEnabled && e.preventDefault()}
         >
       {editing ? (
-        <form className="editForm" onSubmit={handleInputSubmit}>
+        <form className="edit-form" onSubmit={handleInputSubmit}>
           <label htmlFor="editTask">
             <input
               ref={inputRef}
@@ -315,7 +314,7 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
         </form>
       ) : (
         <>
-        <div className="taskItemsLeft" onDoubleClick={handleEdit}>
+        <div className="task-items-left" onDoubleClick={handleEdit}>
           <input
             type="checkbox"
             checked={item.isCompleted || false}
@@ -329,21 +328,21 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
             //localStorage/JSON as a string, and Rating's value prop needs
             //a number to know how many stars to fill in.
             <Rating
-              className="taskPriority"
+              className="task-priority"
               value={Number(item.priority)}
               readOnly
               size="small"
             />
           )}
           {item.dueDate && (
-            <span className="taskDueDate">
+            <span className="task-due-date">
               Due: {new Date(item.dueDate).toLocaleDateString()}
             </span>
           )}
         </div>
-        <div className="taskItemsRight">
+        <div className="task-items-right">
           <button onClick={handleDelete}>
-            <span className="deleteButton" >X</span>
+            <span className="delete-button">X</span>
           </button>
         </div>
       </> 

@@ -38,11 +38,11 @@ function App() {
 
   // The task-creation column is identical whether or not the pet is showing
   const taskCreationColumn = (
-    <div className="sub-Column">
+    <div className="sub-column">
 
-      <TaskTracking className='task-stats' tasksCompleted={tasksCompleted} tasksTotal={tasksTotal} limit={1} />
+      <TaskTracking tasksCompleted={tasksCompleted} tasksTotal={tasksTotal} limit={1} />
 
-      <Form className='form' tasks={tasks} setTasks={setTasks} />
+      <Form tasks={tasks} setTasks={setTasks} />
     </div>
   );
 

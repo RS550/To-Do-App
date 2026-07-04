@@ -14,7 +14,8 @@ function DropDownMenu({ open, priority, setPriority, dueDate, setDueDate }) {
     return (
         <Collapse in={open} className='accordion' id="task-dropdown-panel">
             <div className='drop-menu'>
-                <p className='dropDownTitle'>More Information</p>
+                <h3 className='drop-down-title'>More Information</h3>
+
 
                 <p className='ranking'>Priority</p>
                 <TaskRanking rank={priority} setRank={setPriority} onChange={(newValue) =>

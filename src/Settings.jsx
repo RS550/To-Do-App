@@ -7,8 +7,7 @@ const actionButtonSx = {
   marginTop: '3px',
   border: 'none',
   '&:hover': {
-    backgroundColor: '#7160c1',
-    color: '#cac0f5',
+    color: 'rgb(75, 40, 115)',
   },
 };
 
@@ -61,14 +60,14 @@ function Settings({ tasks, setTasks }) {
   };
 
   return (
-    <div className="settingsPanel">
+    <div className="settings-panel">
       <h2>Settings:</h2>
       <div className='spacer'></div>
 
       <p> Export: Produce a JSON file to save current task list.</p>
-      <div className="listActions">
+      <div className="list-actions">
         <Button
-          className="exportButton"
+          className="export-button"
           size="small"
           onClick={handleExport}
           sx={actionButtonSx}
@@ -80,7 +79,7 @@ function Settings({ tasks, setTasks }) {
 
         <p> Import: Accepts JSON file of tasks that were exported previously.</p>
         <Button
-          className="functionButton"
+          className="function-button"
           size="small"
           onClick={handleImportClick}
           sx={actionButtonSx}
@@ -89,7 +88,7 @@ function Settings({ tasks, setTasks }) {
         </Button>
         <input
           type="file"
-          className="functionButton"
+          className="function-button"
           accept="application/json"
           ref={fileInputRef}
           onChange={handleImportChange}

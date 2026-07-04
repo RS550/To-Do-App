@@ -61,10 +61,10 @@ function Form({tasks, setTasks}){
     };
     return (
         <form className='form' onSubmit={handleSubmit}>
-            <div className='inputRow'>
+            <div className='input-row'>
                 <button
                     type="button"
-                    className="newTask dropDownToggle"
+                    className="new-task"
                     aria-expanded={showDropdown}
                     aria-controls="task-dropdown-panel"
                     aria-label={showDropdown ? "Hide more information" : "Show more information"}
@@ -83,7 +83,7 @@ function Form({tasks, setTasks}){
                     />
                 </label>
  
-                <button className="newTask">+</button>
+                <button className="new-task">+</button>
             </div>
            <Suspense fallback={null}>
             <DropDownMenu

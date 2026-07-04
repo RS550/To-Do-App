@@ -10,7 +10,7 @@ function TaskTracking({ tasksCompleted= 0, tasksTotal= 0 }) {
 
 
   return (
-    <section className="taskStats">
+    <section className="task-stats">
       <div>
         <h2>Current Progress:</h2>
 
