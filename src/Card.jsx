@@ -6,15 +6,12 @@ function Card({className}){
     return (
         <div className={`card${className ? ` ${className}` : ''}`}>
             <img
-              className="cardImage"
+              className="card-image"
               src={petImage}
               alt="BlueBerry"
             ></img>
-            <h2 className="cardTitle">Blueberry</h2>
-            <p className="cardText">Boo </p>
-            <img
-              className="heart-icon"
-              src={heartImage} />
+            <h2 className="card-title">Blueberry</h2>
+
         </div>
     );
 }

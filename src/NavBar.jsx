@@ -4,21 +4,18 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
 // activeTab / setActiveTab are lifted up to App so the tab selection can
-// drive which content renders in the two-column area (replaces the old
-// showPet toggle state).
 function NavBar({ activeTab, setActiveTab }) {
   const handleChange = (event, newValue) => {
     setActiveTab(newValue);
   };
 
   return (
-    <Box className="navBar">
+    <Box className="nav-bar">
       <Tabs
         value={activeTab}
         onChange={handleChange}
         aria-label="view tabs"
-        // Drop the default blue-underline indicator since the selected
-        // state is now shown via each Tab's background color instead.
+        
         sx={{
           '& .MuiTabs-indicator': {
             display: 'none',
@@ -32,7 +29,7 @@ function NavBar({ activeTab, setActiveTab }) {
           aria-controls="nav-tabpanel-0"
           sx={{
             '&.Mui-selected': {
-              backgroundColor: '#cac0f5',
+              backgroundColor: '#9a9de2',
               color:'#43139e',
             },
           }}
@@ -44,7 +41,7 @@ function NavBar({ activeTab, setActiveTab }) {
           aria-controls="nav-tabpanel-1"
           sx={{
             '&.Mui-selected': {
-              backgroundColor: '#cac0f5',
+              backgroundColor: '#9a9de2',
               color:'#43139e',
             },
           }}
@@ -56,9 +53,21 @@ function NavBar({ activeTab, setActiveTab }) {
           aria-controls="nav-tabpanel-2"
           sx={{
             '&.Mui-selected': {
-              backgroundColor: '#cac0f5',
+              backgroundColor: '#9a9de2',
               color:'#43139e',
 
+            },
+          }}
+        />
+        <Tab
+          label="Settings"
+          className="nav-tab-3"
+          id="nav-tab-3"
+          aria-controls="nav-tabpanel-3"
+          sx={{
+            '&.Mui-selected': {
+              backgroundColor: '#9a9de2',
+              color:'#43139e',
             },
           }}
         />
@@ -66,5 +75,7 @@ function NavBar({ activeTab, setActiveTab }) {
     </Box>
   );
 }
-
+ 
 export default NavBar;
+ 
+
