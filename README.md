@@ -2,10 +2,7 @@
 
 A React + Vite to-do app with task prioritization, due dates, drag-and-drop reordering, and a virtual pet companion to keep you company while you work.
 
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
-![MUI](https://img.shields.io/badge/MUI-9-007FFF?logo=mui&logoColor=white)
-
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white) ![MUI](https://img.shields.io/badge/MUI-9-007FFF?logo=mui&logoColor=white)
 
 <img width="1886" height="2140" alt="BlueberriesList" src="https://github.com/user-attachments/assets/3a5ca300-edda-44b5-a8ca-8c02341856fb" />
 
@@ -42,7 +39,7 @@ A React + Vite to-do app with task prioritization, due dates, drag-and-drop reor
 ### Installation
 
 ```bash
-git clone https://github.com/<your-username>/to-do-app.git
+git clone https://github.com/RS550/To-Do-App.git
 cd to-do-app
 npm install
 ```
@@ -79,17 +76,21 @@ npm run lint
 
 ```
 src/
-├── App.jsx            # Top-level layout and tab/view logic
-├── Header.jsx         # Page header
-├── NavBar.jsx         # Tab navigation (Blueberry / List / Lofi)
-├── Card.jsx           # Pet companion card
-├── Form.jsx           # New task input + submit handling
-├── DropDownMenu.jsx   # Expandable panel for priority + due date
-├── TaskRanking.jsx    # Star-rating priority selector
-├── TaskTracking.jsx   # Completed/total task counter
-├── TaskList.jsx       # Renders, sorts, edits, and reorders tasks
-├── ShowPetToggle.jsx  # Legacy pet visibility toggle
-└── styleSheet.css     # Global styles
+├── main.jsx                # App entry point, mounts <App /> to the DOM
+├── App.jsx                 # Top-level layout, tab/view state, and localStorage load
+├── App.css                 # Global styles
+├── Header.jsx               # Page header
+├── NavBar.jsx               # Tab navigation (Blueberry / List / Lofi / Settings)
+├── Card.jsx                 # Pet companion card
+├── Form.jsx                 # New task input + submit handling
+├── DropDownMenu.jsx         # Expandable panel for priority + due date
+├── TaskRanking.jsx          # Star-rating priority selector
+├── TaskTracking.jsx         # Completed/total task counter, wraps Heartmeter
+├── Heartmeter.jsx            # Heart-shaped progress meter (partial fill per heart)
+├── TaskList.jsx              # Renders, sorts, filters, edits, and reorders tasks
+├── Settings.jsx              # Settings tab: JSON export/import for the task list
+├── SparkleCelebration.jsx    # Full-screen sparkle animation when all tasks are completed
+└── assets/                  # Images (pet idle animation, heart icon, card background)
 ```
 
 ## Usage
@@ -98,7 +99,7 @@ src/
 2. Optionally expand **More Information** to set a priority (star rating) and due date before submitting.
 3. Use the sort controls above the task list to view tasks in manual, priority, or due-date order.
 4. Double-click a task to edit its title; check the box to mark it complete; click **X** to delete it.
-5. Use **Export**/**Import** to save or load your task list as a JSON file.
+5. Use **Export**/**Import** on the Settings tab to save or load your task list as a JSON file.
 
 ## Known Issues / Roadmap
 
