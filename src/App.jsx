@@ -63,8 +63,8 @@ function App() {
         {activeTab === 1 && taskCreationColumn}
  
         {activeTab === 3 && <Settings tasks={tasks} setTasks={setTasks} />}
- 
-                <div className={`video-box${activeTab === 2 ? '' : ' video-hidden'}`}>
+        
+        <div className={`video-box${activeTab === 2 ? '' : ' video-hidden'}`}>
           <iframe
             className="iframe"
             width="auto"

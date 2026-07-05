@@ -67,8 +67,8 @@ header h1 {
   grid-template-columns: auto 1fr;
   grid-template-areas:
     "pet taskCreation"
-    "empty  sub";
-  gap: 6px;
+    "video video";
+  gap: 25px;
   margin-bottom: 15px;
   margin-top: -10px;
   align-items: stretch;
@@ -77,15 +77,19 @@ header h1 {
   border-bottom: 15px double var(--border);
   
 }
-
+ 
 @media (max-width: 900px) {
   .two-column {
-    grid-template-rows: auto auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
     grid-template-areas:
+      "pet"
       "taskCreation"
-      "sub";
+      "video";
   }
 }
+ 
+
 
 /* ===== NavBar ===== */
 .nav-bar{
@@ -119,8 +123,8 @@ header h1 {
 .card {
   grid-area: pet;
   background-image: url('./assets/cardBackground.png');
-  background-size: 310px;
-  background-position: -12px -2px;
+  background-size: contain;
+  background-position: center top;
   background-repeat: no-repeat;
   background-color: var(--card);
   border: 4px solid var(--border);
@@ -133,25 +137,15 @@ header h1 {
   text-align: center;
   max-height: 410px !important;
 }
-
+ 
 .card-image {
   width: auto;
   height: auto;
   object-fit: contain;
-  margin-top: 30px;
-  margin-bottom: 8px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-.card-title {
-  font-size: 25px;
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: var(--c4) !important;
-  border-radius: 15px;;
-  padding: 4px 50px 5px 50px;
-  background-color: #e2e2fd;
-  border: .5px outset  #fdfae27e;
-}
 
 .sub-column {
   margin-top: 10px;
@@ -171,7 +165,7 @@ header h1 {
 
 /* ===== Task Stats ===== */
 .task-stats {
-  padding: 15px 0px 15px 20px;
+  padding: 0px 0px 15px 20px;
 }
 
 .task-stats h2 {
@@ -274,24 +268,25 @@ h3 {
 
 /* ===== Video Display ===== */
 .video-box {
+  grid-area: video;
   max-height: 515px;
   background-color: black;
   border-radius: 16px;
   border: 6px solid black;
   box-shadow: 0 2px 8px var(--shadow);
 }
-
+ 
 .iframe {
   width:750px;
   height: 505px;
   max-width: 760px;
   max-height: 515px;
 }
-
+ 
 .video-hidden {
   display: none;
 }
-
+ 
 /* ===== Task List ===== */
 .task-list {
   list-style: none;
@@ -390,22 +385,22 @@ h3 {
   padding: 15px;
   text-align: left;
 }
-
+ 
 .settings-panel h2 {
   font-size: 30px;
   margin-bottom: 4px;
 }
-
+ 
 .settings-panel p {
   margin: 4px 0 10px;
 }
-
+ 
 .list-actions {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
-
+ 
 .export-button,
 .function-button {
   border: 4px solid var(--card) !important;
