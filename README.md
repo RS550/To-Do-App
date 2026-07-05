@@ -7,7 +7,7 @@ A React + Vite to-do app with task prioritization, due dates, drag-and-drop reor
 ![MUI](https://img.shields.io/badge/MUI-9-007FFF?logo=mui&logoColor=white)
 
 
-<img width="2000" height="2002" alt="BlueberryList" src="https://github.com/user-attachments/assets/7f42b6d1-612d-4d43-8c55-40aa94302f2a" />
+<img width="1886" height="2140" alt="BlueberriesList" src="https://github.com/user-attachments/assets/3a5ca300-edda-44b5-a8ca-8c02341856fb" />
 
 🔗 Live demo: blueberries-to-do-app.vercel.app
 
@@ -102,8 +102,8 @@ src/
 
 ## Known Issues / Roadmap
 
-- Large production bundle due to MUI + Emotion + date libraries being bundled together — chunk splitting is planned.
-- `ShowPetToggle.jsx` is a legacy component from before the tab-based nav; slated for removal.
+- Adjust contrast between background and text, tweak the settings tab.
+- Add the option to select other youtube videos in the Lofi tab.
 
 ## License
 
