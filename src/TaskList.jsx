@@ -232,6 +232,8 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
   const inputRef = React.useRef(null);
   //Unique id for this item's edit input
   const editInputId='editTask-${item.id}';
+  //Retain edited task before changes
+  const [editValue, setEditValue] = React.useState(item.title);
 
   const completeTask = () => {
     const updatedTasks = tasks.map((task) =>
@@ -242,6 +244,7 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
 };
 
   const handleEdit = () => {
+    setEditValue(item.title);
     setEditing(true);
   };
 
@@ -272,20 +275,13 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
     event.preventDefault();
   
     //Trim white space
-    const value = event.target.editTask.value.trim();
+    const value = editValue.trim();
   
     // Don't allow blank task titles
     if (!value) {
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === item.id
-            ? { ...task, title: item.title }
-            : task
-        )
-      );
       setEditing(false);
       return;
-  }
+    }
 
   const updatedTasks = tasks.map((task) =>
     task.id === item.id
@@ -295,7 +291,6 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
 
   setTasks(updatedTasks);
   localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-
   setEditing(false);
 };
 
@@ -327,9 +322,8 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
               type="text"
               name="editTask"
               id={editInputId}
-              defaultValue={item?.title}
-              onBlur={handleInputChange}
-              onChange={handleInputChange}
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
             />
           </label>
         </form>

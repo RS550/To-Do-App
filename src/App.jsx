@@ -41,7 +41,7 @@ function App() {
   const taskCreationColumn = (
     <div className="sub-column">
 
-      <TaskTracking tasksCompleted={tasksCompleted} tasksTotal={tasksTotal} limit={1} />
+      <TaskTracking tasksCompleted={tasksCompleted} tasksTotal={tasksTotal} />
 
       <Form tasks={tasks} setTasks={setTasks} />
     </div>
