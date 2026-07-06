@@ -3,11 +3,11 @@ import React from 'react';
 //A four-pointed 'sparkle' glyph (the classic magic/celebration icon shape)
 const SPARKLE_PATH = "M12 2l1.8 5.2L19 9l-5.2 1.8L12 16l-1.8-5.2L5 9l5.2-1.8L12 2z";
 
-const SPARKLE_COUNT = 32;
+const SPARKLE_COUNT = 500;
 
 //how long each individual sparkle takes to fall + fade, in seconds
 const FALL_DURATION_MIN = 1.8;
-const FALL_DURATION_MAX = 3;
+const FALL_DURATION_MAX = 3.5;
 
 //stagger so they don't all start at once
 const START_DELAY_MAX = 0.8;
@@ -15,7 +15,7 @@ const START_DELAY_MAX = 0.8;
 //overlay auto-dismisses shortly after the last sparkle would have finished
 const AUTO_DISMISS_MS = (START_DELAY_MAX + FALL_DURATION_MAX) * 1000 + 400;
 
-const SPARKLE_COLORS = ['#cac0f5', '#8573d3', '#ffffff', '#43139e'];
+const SPARKLE_COLORS = ['#f6f2e9' ,'#e9ce64', '#f0d193'];
 
 function randomBetween(min, max) {
   return min + Math.random() * (max - min);

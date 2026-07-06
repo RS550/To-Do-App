@@ -1,9 +1,9 @@
 function Header() {
 
+  //First react component made
   return (
     <header>
       <h1>Blueberries To Do List:</h1>
-      
     </header>
   );
 }

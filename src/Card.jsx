@@ -1,5 +1,4 @@
 import petImage from './assets/idle.gif'
-import heartImage from './assets/heart.png';
 
 function Card({className}){
 

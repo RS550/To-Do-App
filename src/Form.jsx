@@ -22,9 +22,13 @@ function Form({tasks, setTasks}){
         event.preventDefault();
 
         //grab textbox content
-        const value = event.target.task.value;
+        const value = event.target.task.value.trim();
+
+        //don't add the task if the textbox is empty or only whitespace
+        //doesn't change the drop down state when submit button hit hearly
+        if(!value) {return;}
         
-        //creates new task object, now including the dropdown details
+        //creates new task object
         const newTask = {
             title: value,       //contents of the textbox
             id: nanoid(),       //produces unique task id value

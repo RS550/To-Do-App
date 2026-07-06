@@ -12,7 +12,6 @@ const actionButtonSx = {
 };
 
 //Settings tab: houses task-list-wide actions (currently Export/Import),
-
 function Settings({ tasks, setTasks }) {
   const fileInputRef = React.useRef(null);
 

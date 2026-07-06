@@ -12,7 +12,8 @@ import './App.css';
 
 function App() {
   const [tasks, setTasks] = useState([]);
-  // 0 = default view (pet shown), 1 = focus mode (pet hidden), 2 = video placeholder.
+  // 0 = default view (pet shown), 1 = focus mode (pet hidden), 
+  // 2 = video placeholder, 3 = Settings (import/export)
   
   const [activeTab, setActiveTab] = useState(0);
 

@@ -69,8 +69,6 @@ function TaskList({tasks, setTasks}) {
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
-  //downloads/imports moved to the Settings tab (see Settings.jsx)
-
   //derives a sorted copy for display without touching the underlying
   //tasks array/localStorage, so the user's manual drag order isn't lost
   //when they switch back to it
@@ -232,6 +230,8 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
   const [editing, setEditing] = React.useState(false);
   //When edit mode active directs input to Item
   const inputRef = React.useRef(null);
+  //Unique id for this item's edit input
+  const editInputId='editTask-${item.id}';
 
   const completeTask = () => {
     const updatedTasks = tasks.map((task) =>
@@ -266,17 +266,38 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
       )
     );
   };
-
+  
   //Updates the array of tasks and specific tasks being edited
   const handleInputSubmit = (event) => {
     event.preventDefault();
+  
+    //Trim white space
+    const value = event.target.editTask.value.trim();
+  
+    // Don't allow blank task titles
+    if (!value) {
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === item.id
+            ? { ...task, title: item.title }
+            : task
+        )
+      );
+      setEditing(false);
+      return;
+  }
 
-    // Update localStorage after editing
-    const updatedTasks = JSON.stringify(tasks);
-    localStorage.setItem("tasks", updatedTasks);
+  const updatedTasks = tasks.map((task) =>
+    task.id === item.id
+      ? { ...task, title: value }
+      : task
+  );
 
-    setEditing(false);
-  };
+  setTasks(updatedTasks);
+  localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+
+  setEditing(false);
+};
 
   //Update the task array and displaed list on task deletion
   const handleDelete = () => {
@@ -300,12 +321,12 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
         >
       {editing ? (
         <form className="edit-form" onSubmit={handleInputSubmit}>
-          <label htmlFor="editTask">
+          <label htmlFor={editInputId}>
             <input
               ref={inputRef}
               type="text"
               name="editTask"
-              id="editTask"
+              id={editInputId}
               defaultValue={item?.title}
               onBlur={handleInputChange}
               onChange={handleInputChange}
