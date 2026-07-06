@@ -103,7 +103,7 @@ src/
 
 ## Known Issues / Roadmap
 
-- Adjust contrast between background and text, tweak the settings tab.
+- Drag and drop reordering can accidentally push items to the top of the list.
 - Add the option to select other youtube videos in the Lofi tab.
 
 ## License
