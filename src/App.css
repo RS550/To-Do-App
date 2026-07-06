@@ -72,7 +72,7 @@ header h1 {
   margin-bottom: 15px;
   margin-top: -10px;
   align-items: stretch;
-  padding: 50px;
+  padding: 30px;
   border-top: 5px solid var(--border);
   border-bottom: 15px double var(--border);
   
@@ -148,7 +148,6 @@ header h1 {
 
 
 .sub-column {
-  margin-top: 10px;
   grid-area: taskCreation;
   align-items: center;
   justify-content: center;
@@ -378,6 +377,18 @@ h3 {
 
 .list-control {
   margin: 15px 0 15px 0;
+}
+
+.sub-list-group-header{
+  display: flex;
+  align-items: left;
+  padding: 10px;
+  margin: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: inherit;
+  border: none !important;
+  color: var(--text) !important;
 }
 
 /* ===== Settings ===== */

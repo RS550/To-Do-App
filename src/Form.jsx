@@ -7,13 +7,14 @@ const DropDownMenu = lazy(() => import('./DropDownMenu'));
 
 function Form({tasks, setTasks}){
 
-    //extra task details, lifted up so DropDownMenu's inputs can read/write them.
-    //dueDate is kept as a plain ISO string (not a dayjs object) so it can be
-    //saved to localStorage as-is; DropDownMenu converts it for the DatePicker.
+    //State values for tasks that get passed to the dropDownMenu 
     const [priority, setPriority] = useState(null);
     const [dueDate, setDueDate] = useState(null);
-    const [showDropdown, setShowDropdown] = useState(false);
+    const [subList, setSubList] = useState(null);
 
+    //defines if the dropDownMenu is shown or not
+    const [showDropdown, setShowDropdown] = useState(false);
+    
 
     //onSubmit action
     const handleSubmit = (event) => {
@@ -33,6 +34,7 @@ function Form({tasks, setTasks}){
             title: value,       //contents of the textbox
             id: nanoid(),       //produces unique task id value
             isCompleted: false, //for tracking completed tasks
+            subList: subList,
             priority: priority,
             dueDate: dueDate
         };
@@ -50,8 +52,8 @@ function Form({tasks, setTasks}){
         //clears native form inputs, not this React state
         setPriority(null);
         setDueDate(null);
+        setSubList(null);
         setShowDropdown(false);
-        console.log({value},{priority},{dueDate});
     };
 
         const handleTaskInputChange = (event) => {
@@ -96,7 +98,10 @@ function Form({tasks, setTasks}){
                 setPriority={setPriority}
                 dueDate={dueDate}
                 setDueDate={setDueDate}
+                subList={subList}
+                setSubList={setSubList}
                 />
+
             </Suspense>
         </form>
     );

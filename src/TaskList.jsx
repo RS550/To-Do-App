@@ -5,6 +5,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import Collapse from '@mui/material/Collapse';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -17,6 +18,7 @@ const sortOptions = [
   { value: 'manual', label: 'Manual' },
   { value: 'priority', label: 'Ranked' },
   { value: 'dueDate', label: 'Deadlines' },
+  { value: 'subList', label: 'Sub List' },
   { value: 'completed', label: 'Completed' },
 ];
 
@@ -59,6 +61,10 @@ function TaskList({tasks, setTasks}) {
   //e.g. lets you hide completed tasks while still sorting by priority/due date.
   const [showCompleted, setShowCompleted] = useState(true);
 
+  //names of sub-list accordion sections that are currently collapsed;
+  //absence from this set means "expanded" (sections default open)
+  const [collapsedSubLists, setCollapsedSubLists] = useState(new Set());
+
   const handleSort = () => {
     const updatedTasks = [...tasks];
     const draggedItem = updatedTasks.splice(dragItem.current, 1)[0];
@@ -98,6 +104,18 @@ function TaskList({tasks, setTasks}) {
       });
     }
 
+    if (sortBy === 'subList') {
+      return [...tasks].sort((a, b) => {
+        //tasks with no sub-list sink to the bottom; same convention as
+        //priority/dueDate above
+        if (!a.subList && !b.subList) return 0;
+        if (!a.subList) return 1;
+        if (!b.subList) return -1;
+        //group same sub-list names together, alphabetically by name
+        return a.subList.localeCompare(b.subList);
+      });
+    }
+
     if (sortBy === 'completed') {
       //only show tasks that are marked done, in their existing manual order
       return tasks.filter((task) => task.isCompleted);
@@ -117,6 +135,41 @@ function TaskList({tasks, setTasks}) {
     if (showCompleted) return sortedTasks;
     return sortedTasks.filter((task) => !task.isCompleted);
   }, [sortedTasks, showCompleted, sortBy]);
+
+  //when sorted by sub-list, groups visibleTasks into ordered sections so
+  //each sub-list can be rendered as its own collapsible accordion.
+  //visibleTasks is already alphabetically grouped by subList (see
+  //sortedTasks above), so a single pass preserves that order; tasks with
+  //no sub-list are collected separately and rendered last.
+  const subListGroups = useMemo(() => {
+    if (sortBy !== 'subList' || !visibleTasks) return null;
+
+    const named = new Map();
+    const unassigned = [];
+
+    visibleTasks.forEach((task) => {
+      if (!task.subList) {
+        unassigned.push(task);
+        return;
+      }
+      if (!named.has(task.subList)) named.set(task.subList, []);
+      named.get(task.subList).push(task);
+    });
+
+    return { named, unassigned };
+  }, [visibleTasks, sortBy]);
+
+  const toggleSubListCollapse = (name) => {
+    setCollapsedSubLists((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) {
+        next.delete(name);
+      } else {
+        next.add(name);
+      }
+      return next;
+    });
+  };
 
   const handleSortMenuOpen = (event) => {
     setSortMenuAnchor(event.currentTarget);
@@ -194,38 +247,130 @@ function TaskList({tasks, setTasks}) {
       </div>
       <div className='borderLine'></div>
 
-      <ul className="task-list">
-        {visibleTasks && visibleTasks.length > 0 ? (
-          visibleTasks.map((item) => (
-            <Item
-              key={item.id}
-              item={item}
-              tasks={tasks}
-              setTasks={setTasks}
-              //looked up against the underlying (unfiltered/unsorted) tasks
-              //array so drag-and-drop reordering stays correct even when
-              //showCompleted or a non-manual sort has changed what's visible
-              index={tasks.findIndex((t) => t.id === item.id)}
-              dragItem={dragItem}
-              dragOverItem={dragOverItem}
-              handleSort={handleSort}
-              draggingEnabled={sortBy === 'manual'}
-              //in the Completed view, showCompleted=false means "don't
-              //strike through" rather than "hide" - see visibleTasks above
-              suppressStrikethrough={sortBy === 'completed' && !showCompleted}
-            />
-          ))
-        ) : (
-          <p></p> //displays when no tasks are rendered
-        )}
-      </ul>
+      {sortBy === 'subList' && subListGroups ? (
+        <div className="sub-list-groups">
+          {subListGroups.named.size === 0 && subListGroups.unassigned.length === 0 ? (
+            <p></p> //displays when no tasks are rendered
+          ) : (
+            <>
+              {[...subListGroups.named.entries()].map(([name, groupTasks]) => {
+                const isOpen = !collapsedSubLists.has(name);
+                return (
+                  <div className="sub-list-group" key={name}>
+                    <button
+                      type="button"
+                      className="sub-list-group-header"
+                      aria-expanded={isOpen}
+                      aria-controls={`sub-list-panel-${name}`}
+                      onClick={() => toggleSubListCollapse(name)}
+                    >
+                      <ArrowDropDownIcon
+                        style={{ transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)' }}
+                      />
+                      {name}
+                    </button>
+                    <Collapse in={isOpen} id={`sub-list-panel-${name}`}>
+                      <ul className="task-list">
+                        {groupTasks.map((item) => (
+                          <Item
+                            key={item.id}
+                            item={item}
+                            tasks={tasks}
+                            setTasks={setTasks}
+                            index={tasks.findIndex((t) => t.id === item.id)}
+                            dragItem={dragItem}
+                            dragOverItem={dragOverItem}
+                            handleSort={handleSort}
+                            //manual drag-and-drop is also available while
+                            //grouped by sub-list, so tasks can be reordered
+                            //within (or across) groups
+                            draggingEnabled={sortBy === 'manual' || sortBy === 'subList'}
+                            suppressStrikethrough={sortBy === 'completed' && !showCompleted}
+                            //name is already shown in the section header,
+                            //so skip the redundant inline label
+                            showSubListLabel={false}
+                          />
+                        ))}
+                      </ul>
+                    </Collapse>
+                  </div>
+                );
+              })}
+
+              {subListGroups.unassigned.length > 0 && (
+                <div className="sub-list-group" key="__unassigned">
+                  <button
+                    type="button"
+                    className="sub-list-group-header"
+                    aria-expanded={!collapsedSubLists.has('__unassigned')}
+                    aria-controls="sub-list-panel-unassigned"
+                    onClick={() => toggleSubListCollapse('__unassigned')}
+                  >
+                    <ArrowDropDownIcon
+                      style={{
+                        transform: collapsedSubLists.has('__unassigned') ? 'rotate(-90deg)' : 'rotate(0deg)',
+                      }}
+                    />
+                    Unlisted
+                  </button>
+                  <Collapse in={!collapsedSubLists.has('__unassigned')} id="sub-list-panel-unassigned">
+                    <ul className="task-list">
+                      {subListGroups.unassigned.map((item) => (
+                        <Item
+                          key={item.id}
+                          item={item}
+                          tasks={tasks}
+                          setTasks={setTasks}
+                          index={tasks.findIndex((t) => t.id === item.id)}
+                          dragItem={dragItem}
+                          dragOverItem={dragOverItem}
+                          handleSort={handleSort}
+                          draggingEnabled={sortBy === 'manual' || sortBy === 'subList'}
+                          suppressStrikethrough={sortBy === 'completed' && !showCompleted}
+                          showSubListLabel={false}
+                        />
+                      ))}
+                    </ul>
+                  </Collapse>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      ) : (
+        <ul className="task-list">
+          {visibleTasks && visibleTasks.length > 0 ? (
+            visibleTasks.map((item) => (
+              <Item
+                key={item.id}
+                item={item}
+                tasks={tasks}
+                setTasks={setTasks}
+                //looked up against the underlying (unfiltered/unsorted) tasks
+                //array so drag-and-drop reordering stays correct even when
+                //showCompleted or a non-manual sort has changed what's visible
+                index={tasks.findIndex((t) => t.id === item.id)}
+                dragItem={dragItem}
+                dragOverItem={dragOverItem}
+                handleSort={handleSort}
+                draggingEnabled={sortBy === 'manual'}
+                //in the Completed view, showCompleted=false means "don't
+                //strike through" rather than "hide" - see visibleTasks above
+                suppressStrikethrough={sortBy === 'completed' && !showCompleted}
+              />
+            ))
+          ) : (
+            <p></p> //displays when no tasks are rendered
+          )}
+        </ul>
+      )}
     </>
   );
 }
 
 
 //Child of TaskList, renders each task as an Item
-function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort, draggingEnabled, suppressStrikethrough }) {
+function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort, draggingEnabled, suppressStrikethrough, showSubListLabel = true }) {
   //Tracks if Item is in edit mode
   const [editing, setEditing] = React.useState(false);
   //When edit mode active directs input to Item
@@ -352,6 +497,11 @@ function Item({ item, tasks, setTasks, index, dragItem, dragOverItem, handleSort
           {item.dueDate && (
             <span className="task-due-date">
               Due: {new Date(item.dueDate).toLocaleDateString()}
+            </span>
+          )}
+          {item.subList && showSubListLabel && (
+            <span className="task-sub-list">
+              {item.subList}
             </span>
           )}
         </div>
