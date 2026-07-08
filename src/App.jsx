@@ -8,6 +8,7 @@ import Card from './Card.jsx';
 import NavBar from './NavBar.jsx';
 import Settings from './Settings.jsx';
 import SparkleCelebration from './SparkleCelebration.jsx';
+import JarCharms from './JarCharms.jsx';
 import './App.css';
 
 function App() {
@@ -16,6 +17,12 @@ function App() {
   // 2 = video placeholder, 3 = Settings (import/export)
   
   const [activeTab, setActiveTab] = useState(0);
+
+  // Points earned, as reported up by TaskTracking (tasksCompleted * 10).
+  const [totalPoints, setTotalPoints] = useState(0);
+
+  // Hearts purchased so far (0-10). Costs 50, 100, 150... per heart.
+  const [heartsOwned, setHeartsOwned] = useState(0);
 
  // Load from localStorage
   React.useEffect(() => {
@@ -27,22 +34,56 @@ function App() {
         console.error('Invalid JSON:', e);
       }
     }
+
+    const storedHearts = localStorage.getItem("heartsOwned");
+    if (storedHearts) {
+      const parsed = parseInt(storedHearts, 10);
+      if (!Number.isNaN(parsed)) setHeartsOwned(parsed);
+    }
   }, []);
+
+  React.useEffect(() => {
+    localStorage.setItem("heartsOwned", String(heartsOwned));
+  }, [heartsOwned]);
 
  const tasksCompleted = tasks.filter(task => task.isCompleted === true).length;
  const tasksTotal = tasks.length;
 
  //celebration trigger: more than one task exists, and every one of them is done
  const allTasksCompleted = tasksTotal > 1 && tasksCompleted === tasksTotal;
+
+ const MAX_HEARTS = 10;
+ // Heart n costs 50n points; cumulative cost for h hearts is 50*(1+2+...+h) = 25h(h+1)
+ const spentPoints = 25 * heartsOwned * (heartsOwned + 1);
+ const pointsAvailable = Math.max(0, totalPoints - spentPoints);
+ const nextHeartCost = heartsOwned < MAX_HEARTS ? 50 * (heartsOwned + 1) : null;
+ const canBuyHeart = nextHeartCost !== null && pointsAvailable >= nextHeartCost;
+
+ const buyHeart = () => {
+   if (!canBuyHeart) return;
+   setHeartsOwned(h => Math.min(MAX_HEARTS, h + 1));
+ };
  
 
 
-  // The task-creation column is identical whether or not the pet is showing
-  const taskCreationColumn = (
+  // Tab 0: Card + stats sit side by side; Form spans full width beneath both.
+  // Tab 1: only Form is shown, in that same full-width row.
+  const statsColumn = (
     <div className="sub-column">
+      <TaskTracking
+        tasksCompleted={tasksCompleted}
+        tasksTotal={tasksTotal}
+        pointsAvailable={pointsAvailable}
+        nextHeartCost={nextHeartCost}
+        canBuyHeart={canBuyHeart}
+        onBuyHeart={buyHeart}
+        onPointsChange={setTotalPoints}
+      />
+    </div>
+  );
 
-      <TaskTracking tasksCompleted={tasksCompleted} tasksTotal={tasksTotal} />
-
+  const formRow = (
+    <div className="form-row">
       <Form tasks={tasks} setTasks={setTasks} />
     </div>
   );
@@ -56,12 +97,13 @@ function App() {
       <div className='two-column'>
         {activeTab === 0 && (
           <>
-            <Card className='pet' />
-            {taskCreationColumn}
+            <Card className='pet' heartsOwned={heartsOwned} />
+            {statsColumn}
+            {formRow}
           </>
         )}
  
-        {activeTab === 1 && taskCreationColumn}
+        {activeTab === 1 && formRow}
  
         {activeTab === 3 && <Settings tasks={tasks} setTasks={setTasks} />}
         

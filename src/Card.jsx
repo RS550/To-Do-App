@@ -1,6 +1,7 @@
-import petImage from './assets/idle.gif'
+import petImage from './assets/idle.gif';
+import Heartmeter from './Heartmeter.jsx';
 
-function Card({className}){
+function Card({className, heartsOwned}){
 
     return (
         <div className={`card${className ? ` ${className}` : ''}`}>
@@ -10,6 +11,7 @@ function Card({className}){
               alt="BlueBerry"
             ></img>
             <h2 className="card-title">Blueberry</h2>
+            <Heartmeter heartsOwned={heartsOwned} />
 
         </div>
     );

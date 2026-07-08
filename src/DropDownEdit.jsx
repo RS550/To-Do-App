@@ -40,7 +40,7 @@ const subListButtonSx = {
 };
 
 
-function DropDownMenu({ open, priority, setPriority, dueDate, setDueDate, subList, setSubList, panelId = 'task-dropdown-panel' }) {
+function DropDownEdit({ open, priority, setPriority, dueDate, setDueDate, subList, setSubList, panelId = 'task-dropdown-panel' }) {
     //names of user-created sub-lists, persisted so they're still there
     //next time a task is created
     const [subListOptions, setSubListOptions] = useState(() => {
@@ -110,18 +110,14 @@ function DropDownMenu({ open, priority, setPriority, dueDate, setDueDate, subLis
     };
     return (
         <Collapse in={open} className='accordion' id={panelId}>
-            <div className='drop-menu'>
-                <h3 className='drop-down-title'>More Information</h3>
+            <div className='drop-edit'>
 
-
-                <p className='ranking'>Priority</p>
+                <p className='edit-rank'>Priority:</p>
                 <TaskRanking rank={priority} setRank={setPriority} onChange={(newValue) =>
                             setPriority(newValue)
                         }></TaskRanking>
 
-                <div className='spacer' />
-
-                <p className='due-date'>Due Date</p>
+                <p className='edit-due'>Deadline:</p>
                  <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                         value={dueDate ? dayjs(dueDate) : null}
@@ -131,9 +127,7 @@ function DropDownMenu({ open, priority, setPriority, dueDate, setDueDate, subLis
                     />
                 </LocalizationProvider>
 
-                <div className='spacer' />
-
-                <p className='sub-list'>Sub List</p>
+                <p className='sub-list'>Project:</p>
                 <Button
                     className="sub-list-dropdown"
                     aria-label="select sub list"
@@ -211,4 +205,4 @@ function DropDownMenu({ open, priority, setPriority, dueDate, setDueDate, subLis
         </Collapse>
     );
 }
-export default DropDownMenu;
+export default DropDownEdit;

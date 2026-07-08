@@ -60,40 +60,35 @@ function Settings({ tasks, setTasks }) {
 
   return (
     <div className="settings-panel">
-      <h2>Settings:</h2>
-      <div className='spacer'></div>
+      <h2 className='settingsTitle'>Settings:</h2>
 
-      <p> Export: Produce a JSON file to save current task list.</p>
-      <div className="list-actions">
-        <Button
+      <p className='export-text'> Export: Produce a JSON file to save current task list.</p>
+      <Button
           className="export-button"
           size="small"
           onClick={handleExport}
-          sx={actionButtonSx}
+          
         >
           Export
         </Button>
-
-        <div className='spacer'></div>
-
-        <p> Import: Accepts JSON file of tasks that were exported previously.</p>
+      
+      <p className='inport-text'> Import: Accepts JSON file of tasks that were exported previously.</p>
         <Button
-          className="function-button"
+          className="import-button"
           size="small"
           onClick={handleImportClick}
-          sx={actionButtonSx}
+          
         >
           Import
         </Button>
         <input
           type="file"
-          className="function-button"
+          className="export-button"
           accept="application/json"
           ref={fileInputRef}
           onChange={handleImportChange}
           style={{ display: 'none' }}
         />
-      </div>
     </div>
   );
 }
