@@ -6,16 +6,9 @@ import TaskItem from './TaskItem.jsx';
 import useSortedTasks from './useSortedTasks.js';
 
 // from array of tasks, produces ordered list of tasks
-function TaskList({ tasks, setTasks }) {
+function TaskList({ tasks, setTasks, sortBy, setSortBy, showCompleted, setShowCompleted }) {
   const dragItem = React.useRef(null);
   const dragOverItem = React.useRef(null);
-
-  //'manual' = user's drag-and-drop order, otherwise sorted on the fly for display
-  const [sortBy, setSortBy] = useState('manual');
-
-  //independent of sortBy: whether completed tasks are visible at all.
-  //e.g. lets you hide completed tasks while still sorting by priority/due date.
-  const [showCompleted, setShowCompleted] = useState(true);
 
   //names of sub-list accordion sections that are currently collapsed;
   //absence from this set means "expanded" (sections default open)
@@ -52,15 +45,7 @@ function TaskList({ tasks, setTasks }) {
 
   return (
     <>
-      <TaskListControls
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-        showCompleted={showCompleted}
-        setShowCompleted={setShowCompleted}
-      />
-      <div className='borderLine'></div>
-
-
+    
       {sortBy === 'subList' && subListGroups ? (
         <div className="sub-list-groups">
           {subListGroups.named.size === 0 && subListGroups.unassigned.length === 0 ? (

@@ -9,6 +9,9 @@ import NavBar from './NavBar.jsx';
 import Settings from './Settings.jsx';
 import SparkleCelebration from './SparkleCelebration.jsx';
 import JarCharms from './JarCharms.jsx';
+import ControlBar from './ControlBar.jsx';
+import { PRESET_VIDEOS } from './VideoControler.jsx';
+import VideoPlayer from './VideoPlayer.jsx';
 import './App.css';
 
 function App() {
@@ -24,7 +27,25 @@ function App() {
   // Hearts purchased so far (0-10). Costs 50, 100, 150... per heart.
   const [heartsOwned, setHeartsOwned] = useState(0);
 
- // Load from localStorage
+  // Which YouTube video is loaded in the Lofi tab. Defaults to the video
+  // that used to be hard-coded here; the dropdown lets the user swap it
+  // for another preset or a custom URL.
+  const [selectedVideoId, setSelectedVideoId] = useState(PRESET_VIDEOS[0].videoId);
+
+  //Current video status, reported by VideoPlayer via onStateChange
+  //passes to VideoControler to manage icon changes
+  //Calls VideoPlaerRef.current.toggle() to flip playback
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoPlayerRef = React.useRef(null);
+
+  //'manual' = user's drag-and-drop order, otherwise sorted on the fly for display
+  const [sortBy, setSortBy] = useState('manual');
+
+  //independent of sortBy: whether completed tasks are visible at all.
+  //e.g. lets you hide completed tasks while still sorting by priority/due date.
+  const [showCompleted, setShowCompleted] = useState(true);
+
+  // Load from localStorage
   React.useEffect(() => {
     const storedTasks = localStorage.getItem("tasks");
     if (storedTasks) {
@@ -34,38 +55,43 @@ function App() {
         console.error('Invalid JSON:', e);
       }
     }
-
+ 
     const storedHearts = localStorage.getItem("heartsOwned");
     if (storedHearts) {
       const parsed = parseInt(storedHearts, 10);
       if (!Number.isNaN(parsed)) setHeartsOwned(parsed);
     }
+ 
+    const storedVideoId = localStorage.getItem("selectedVideoId");
+    if (storedVideoId) setSelectedVideoId(storedVideoId);
   }, []);
-
+ 
   React.useEffect(() => {
     localStorage.setItem("heartsOwned", String(heartsOwned));
   }, [heartsOwned]);
-
+ 
+  React.useEffect(() => {
+    localStorage.setItem("selectedVideoId", selectedVideoId);
+  }, [selectedVideoId]);
+ 
  const tasksCompleted = tasks.filter(task => task.isCompleted === true).length;
  const tasksTotal = tasks.length;
-
+ 
  //celebration trigger: more than one task exists, and every one of them is done
  const allTasksCompleted = tasksTotal > 1 && tasksCompleted === tasksTotal;
-
+ 
  const MAX_HEARTS = 10;
  // Heart n costs 50n points; cumulative cost for h hearts is 50*(1+2+...+h) = 25h(h+1)
  const spentPoints = 25 * heartsOwned * (heartsOwned + 1);
  const pointsAvailable = Math.max(0, totalPoints - spentPoints);
  const nextHeartCost = heartsOwned < MAX_HEARTS ? 50 * (heartsOwned + 1) : null;
  const canBuyHeart = nextHeartCost !== null && pointsAvailable >= nextHeartCost;
-
+ 
  const buyHeart = () => {
    if (!canBuyHeart) return;
    setHeartsOwned(h => Math.min(MAX_HEARTS, h + 1));
  };
  
-
-
   // Tab 0: Card + stats sit side by side; Form spans full width beneath both.
   // Tab 1: only Form is shown, in that same full-width row.
   const statsColumn = (
@@ -81,13 +107,33 @@ function App() {
       />
     </div>
   );
-
+ 
   const formRow = (
     <div className="form-row">
       <Form tasks={tasks} setTasks={setTasks} />
     </div>
   );
-
+ 
+  const controlRow = (
+  <>
+  <div className='control-bar'> </div>
+    <ControlBar 
+      activeTab={activeTab}
+      taskProps={{
+          sortBy,
+          setSortBy,
+          showCompleted,
+          setShowCompleted,
+      }}
+      videoProps={{
+          selectedVideoId,
+          setSelectedVideoId,
+          isPlaying,
+          onToggle: () => videoPlayerRef.current?.toggle(),
+      }} />
+  </>
+  );
+ 
   return (
     <div className="wrapper">
       <SparkleCelebration active={allTasksCompleted} />
@@ -103,29 +149,34 @@ function App() {
           </>
         )}
  
-        {activeTab === 1 && formRow}
+        {activeTab === 1 && formRow }
  
         {activeTab === 3 && <Settings tasks={tasks} setTasks={setTasks} />}
         
         <div className={`video-box${activeTab === 2 ? '' : ' video-hidden'}`}>
-          <iframe
-            className="iframe"
-            width="auto"
-            height="auto"
-            src="https://www.youtube.com/embed/4xDzrJKXOOY?enablejsapi=1"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          ></iframe>
+ 
+          <VideoPlayer
+            ref={videoPlayerRef}
+            selectedVideoId={selectedVideoId}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
+          />
+ 
         </div>
       </div>
-      {activeTab !== 3 && <TaskList tasks={tasks} setTasks={setTasks} />}
+      {activeTab !== 3 && (
+          <>
+          {controlRow}
+          <TaskList tasks={tasks} setTasks={setTasks}   
+                    sortBy={sortBy} setSortBy={setSortBy}
+                    showCompleted={showCompleted} setShowCompleted={setShowCompleted} 
+            />
+          </>
+        )}
+      
     </div>
   );   
 }
  
- 
- 
+
 export default App;
