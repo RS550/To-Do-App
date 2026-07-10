@@ -2,8 +2,9 @@ import React, { lazy, Suspense } from 'react';
 import Rating from '@mui/material/Rating';
 //Lazy-loaded for the same reason Form.jsx lazy-loads it: this panel isn't
 //needed until a task is actually being edited, so it's split into its own
-//chunk. Since the import path matches Form.jsx's, they share the same chunk.
-const DropDownEdit = lazy(() => import('./DropDownEdit'));
+//chunk. Shares DropDownMenu.jsx with Form.jsx (variant="edit" swaps the
+//layout/copy), so they also share the same chunk.
+const DropDownEdit = lazy(() => import('./DropDownMenu'));
 
 //Renders a single task row. Used both by TaskList's flat list and by
 //SubListGroup's per-sub-list lists.
@@ -28,7 +29,6 @@ function TaskItem({ item, tasks, setTasks, index, dragItem, dragOverItem, handle
       task.id === item.id ? { ...task, isCompleted: !task.isCompleted } : task
   );
   setTasks(updatedTasks);
-  localStorage.setItem("tasks", JSON.stringify(updatedTasks));
 };
 
   //Opens the edit panel, seeding the drafts from the task's current values
@@ -92,19 +92,12 @@ function TaskItem({ item, tasks, setTasks, index, dragItem, dragOverItem, handle
     );
 
     setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
     setEditing(false);
   };
 
   //Update the task array and displaed list on task deletion
   const handleDelete = () => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== item.id));
-
-    // Update localStorage after deleting
-    const updatedTasks = JSON.stringify(
-      tasks.filter((task) => task.id !== item.id)
-    );
-    localStorage.setItem("tasks", updatedTasks);
   };
 
   return (
@@ -141,6 +134,7 @@ function TaskItem({ item, tasks, setTasks, index, dragItem, dragOverItem, handle
               setDueDate={setEditDueDate}
               subList={editSubList}
               setSubList={setEditSubList}
+              variant="edit"
             />
           </Suspense>
 

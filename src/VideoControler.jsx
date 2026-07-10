@@ -9,6 +9,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import MusicOffIcon from '@mui/icons-material/MusicOff';
 import AddIcon from '@mui/icons-material/Add';
+import usePersistedState from './usePersistedState.js';
 
 
 // localStorage key used to persist any custom videos the user has added,
@@ -72,14 +73,7 @@ function VideoControler({
     panelId = 'video-dropdown',
    }) {
   
-  const [customVideos, setCustomVideos] = useState(() => {
-    try {
-      const saved = localStorage.getItem(CUSTOM_VIDEOS_STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [customVideos, setCustomVideos] = usePersistedState(CUSTOM_VIDEOS_STORAGE_KEY, []);
 const [menuAnchor, setMenuAnchor] = useState(null);
   const menuOpen = Boolean(menuAnchor);
  
@@ -138,11 +132,7 @@ const [menuAnchor, setMenuAnchor] = useState(null);
  
     const newVideo = { id: `custom-${videoId}`, name: 'Custom video', videoId };
  
-    setCustomVideos((prev) => {
-      const updated = [...prev, newVideo];
-      localStorage.setItem(CUSTOM_VIDEOS_STORAGE_KEY, JSON.stringify(updated));
-      return updated;
-    });
+    setCustomVideos((prev) => [...prev, newVideo]);
  
     setSelectedVideoId(videoId);
     handleMenuClose();

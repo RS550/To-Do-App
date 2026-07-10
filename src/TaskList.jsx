@@ -21,7 +21,6 @@ function TaskList({ tasks, setTasks, sortBy, setSortBy, showCompleted, setShowCo
     dragItem.current = null;
     dragOverItem.current = null;
     setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
   const { visibleTasks, subListGroups } = useSortedTasks(tasks, sortBy, showCompleted);

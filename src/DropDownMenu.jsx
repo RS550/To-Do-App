@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import dayjs from 'dayjs';
 import TaskRanking from './TaskRanking';
+import usePersistedState from './usePersistedState.js';
 
 //Component from mui
 import Collapse from '@mui/material/Collapse';
@@ -39,18 +40,40 @@ const subListButtonSx = {
   },
 };
 
+//The two variants only ever differed in layout/copy (Form's "create task"
+//dropdown wants a header + spacers + longer labels; TaskItem's "edit task"
+//panel wants it compact with no header). Everything else - state, sub-list
+//menu, handlers - was identical, so that's parameterized here instead of
+//living in two copies of the same file.
+const VARIANT_CONFIG = {
+  create: {
+    wrapperClassName: 'drop-menu',
+    showHeader: true,
+    showSpacers: true,
+    priorityLabel: 'Priority',
+    priorityLabelClassName: 'ranking',
+    dueLabel: 'Due Date',
+    dueLabelClassName: 'due-date',
+    subListLabel: 'Sub List',
+  },
+  edit: {
+    wrapperClassName: 'drop-edit',
+    showHeader: false,
+    showSpacers: false,
+    priorityLabel: 'Priority:',
+    priorityLabelClassName: 'edit-rank',
+    dueLabel: 'Deadline:',
+    dueLabelClassName: 'edit-due',
+    subListLabel: 'Project:',
+  },
+};
 
-function DropDownMenu({ open, priority, setPriority, dueDate, setDueDate, subList, setSubList, panelId = 'task-dropdown-panel' }) {
+function DropDownMenu({ open, priority, setPriority, dueDate, setDueDate, subList, setSubList, panelId = 'task-dropdown-panel', variant = 'create' }) {
+    const layout = VARIANT_CONFIG[variant] ?? VARIANT_CONFIG.create;
+
     //names of user-created sub-lists, persisted so they're still there
     //next time a task is created
-    const [subListOptions, setSubListOptions] = useState(() => {
-        try {
-            const saved = localStorage.getItem(SUBLIST_STORAGE_KEY);
-            return saved ? JSON.parse(saved) : [];
-        } catch {
-            return [];
-        }
-    });
+    const [subListOptions, setSubListOptions] = usePersistedState(SUBLIST_STORAGE_KEY, []);
 
     const [subListMenuAnchor, setSubListMenuAnchor] = useState(null);
     const subListMenuOpen = Boolean(subListMenuAnchor);
@@ -100,9 +123,7 @@ function DropDownMenu({ open, priority, setPriority, dueDate, setDueDate, subLis
         setSubListOptions((prev) => {
             //don't add a duplicate if the name already exists
             if (prev.includes(trimmed)) return prev;
-            const updated = [...prev, trimmed];
-            localStorage.setItem(SUBLIST_STORAGE_KEY, JSON.stringify(updated));
-            return updated;
+            return [...prev, trimmed];
         });
 
         setSubList(trimmed);
@@ -110,18 +131,17 @@ function DropDownMenu({ open, priority, setPriority, dueDate, setDueDate, subLis
     };
     return (
         <Collapse in={open} className='accordion' id={panelId}>
-            <div className='drop-menu'>
-                <h3 className='drop-down-title'>More Information</h3>
+            <div className={layout.wrapperClassName}>
+                {layout.showHeader && <h3 className='drop-down-title'>More Information</h3>}
 
-
-                <p className='ranking'>Priority</p>
+                <p className={layout.priorityLabelClassName}>{layout.priorityLabel}</p>
                 <TaskRanking rank={priority} setRank={setPriority} onChange={(newValue) =>
                             setPriority(newValue)
                         }></TaskRanking>
 
-                <div className='spacer' />
+                {layout.showSpacers && <div className='spacer' />}
 
-                <p className='due-date'>Due Date</p>
+                <p className={layout.dueLabelClassName}>{layout.dueLabel}</p>
                  <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                         value={dueDate ? dayjs(dueDate) : null}
@@ -131,9 +151,9 @@ function DropDownMenu({ open, priority, setPriority, dueDate, setDueDate, subLis
                     />
                 </LocalizationProvider>
 
-                <div className='spacer' />
+                {layout.showSpacers && <div className='spacer' />}
 
-                <p className='sub-list'>Sub List</p>
+                <p className='sub-list'>{layout.subListLabel}</p>
                 <Button
                     className="sub-list-dropdown"
                     aria-label="select sub list"

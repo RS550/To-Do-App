@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
+import { resetAllPersistedState } from './usePersistedState.js';
 
 const actionButtonSx = {
   color: 'inherit',
@@ -14,6 +15,24 @@ const actionButtonSx = {
 //Settings tab: houses task-list-wide actions (currently Export/Import),
 function Settings({ tasks, setTasks }) {
   const fileInputRef = React.useRef(null);
+
+  //Reset is destructive (wipes tasks, points, hearts, video, sub-lists), so
+  //it asks for confirmation before actually clearing anything - same
+  //reveal-a-sub-panel pattern used for "create new sub-list"/"add video" elsewhere.
+  const [confirmingReset, setConfirmingReset] = React.useState(false);
+
+  const handleResetClick = () => {
+    setConfirmingReset(true);
+  };
+
+  const handleCancelReset = () => {
+    setConfirmingReset(false);
+  };
+
+  const handleConfirmReset = () => {
+    resetAllPersistedState();
+    setConfirmingReset(false);
+  };
 
   //downloads the current task list as a JSON file the user can save/share
   const handleExport = () => {
@@ -47,7 +66,6 @@ function Settings({ tasks, setTasks }) {
           throw new Error('Imported file is not a task list');
         }
         setTasks(importedTasks);
-        localStorage.setItem('tasks', JSON.stringify(importedTasks));
       } catch (err) {
         console.error('Failed to import tasks:', err);
       }
@@ -89,6 +107,36 @@ function Settings({ tasks, setTasks }) {
           onChange={handleImportChange}
           style={{ display: 'none' }}
         />
+
+      <p className='reset-text'> Reset: Permanently clears all saved data (tasks, points, hearts, videos and lists) on this device.</p>
+      {confirmingReset ? (
+        <div className="reset-confirm">
+          <span className="reset-confirm-text">Are you sure? This can't be undone.</span>
+          <Button
+            className="reset-confirm-button"
+            size="small"
+            color="error"
+            onClick={handleConfirmReset}
+          >
+            Yes, reset
+          </Button>
+          <Button
+            className="reset-cancel-button"
+            size="small"
+            onClick={handleCancelReset}
+          >
+            Cancel
+          </Button>
+        </div>
+      ) : (
+        <Button
+          className="reset-button"
+          size="small"
+          onClick={handleResetClick}
+        >
+          Reset
+        </Button>
+      )}
     </div>
   );
 }

@@ -590,7 +590,8 @@ h3 {
   grid-template-areas:
     "settings-title settings-title"
     "import-text import-button"
-    "export-text export-button";
+    "export-text export-button"
+    "reset-text reset-button";
   column-gap: 25px;
   row-gap: 15px;
   padding: 25px 30px 25px 30px;
@@ -621,6 +622,9 @@ h3 {
 }
  
 .export-button {
+  padding: 10px !important;
+  margin: 10px !important;
+  width:80px;
   color: var(--text) !important;
   display: grid;
   grid-area: export-button;
@@ -637,9 +641,13 @@ h3 {
 }
  
 .import-button{
+  padding: 10px !important;
+  margin: 10px !important;
+  width:80px;
   color: var(--text) !important;
   display: grid;
   grid-area: import-button;
+  align-items: right;
   border: 4px solid var(--c0) !important;
   border-radius: 16px !important;
   background-color: var(--c0) !important;
@@ -651,6 +659,38 @@ h3 {
   border-color: var(--border) !important;
   color: var(--hover) !important;
 }
+
+.reset-button {
+  color: var(--text) !important;
+  display: grid;
+  padding: 10px !important;
+  margin: 10px !important;
+  grid-area: reset-button;
+  border: 4px solid var(--c0) !important;
+  border-radius: 16px !important;
+  background-color: var(--c0) !important;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.reset-confirm-button {
+  padding: 10px !important;
+  margin: 10px !important;
+  color: rgb(125, 4, 67) !important;
+  border: 4px solid #c7c7fa!important;
+  border-radius: 16px !important;
+  background-color: #c7c7fa !important;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.reset-cancel-button {
+  padding: 10px !important;
+  margin: 10px !important;
+  color: rgb(4, 125, 81) !important;
+  border: 4px solid var(--c0)!important;
+  border-radius: 16px !important;
+  background-color:var(--c0) !important;
+}
+
  
 /* ===== Edit Mode ===== */
 .edit-form {
