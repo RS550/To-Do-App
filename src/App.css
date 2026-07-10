@@ -445,7 +445,7 @@ h3 {
  
 .heart-button:hover:not(:disabled) {
   color: var(--hover) !important;
-  background-color: var(border) !important;
+  background-color: var(--border) !important;
 }
 
 .heart-button:disabled {
