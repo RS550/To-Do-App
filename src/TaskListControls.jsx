@@ -66,7 +66,6 @@ function TaskListControls({ sortBy, setSortBy, showCompleted, setShowCompleted }
 
   return (
     <div className="list-control">
-      <h2 className='subtitle' >Next Up:</h2>
       <Button
         className="sort-dropdown"
         aria-label="sort tasks by"

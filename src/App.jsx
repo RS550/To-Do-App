@@ -32,12 +32,12 @@ function App() {
   // for another preset or a custom URL.
   const [selectedVideoId, setSelectedVideoId] = useState(PRESET_VIDEOS[0].videoId);
 
-  //Current video status, reported by VideoPlayer via onStateChange
-  //passes to VideoControler to manage icon changes
-  //Calls VideoPlaerRef.current.toggle() to flip playback
+  // Whether the video is currently playing. VideoPlayer reports this up
+  // via onStateChange; VideoControler reads it to decide which icon to
+  // show and calls videoPlayerRef.current.toggle() to flip playback.
   const [isPlaying, setIsPlaying] = useState(false);
   const videoPlayerRef = React.useRef(null);
-
+  
   //'manual' = user's drag-and-drop order, otherwise sorted on the fly for display
   const [sortBy, setSortBy] = useState('manual');
 
@@ -45,7 +45,7 @@ function App() {
   //e.g. lets you hide completed tasks while still sorting by priority/due date.
   const [showCompleted, setShowCompleted] = useState(true);
 
-  // Load from localStorage
+ // Load from localStorage
   React.useEffect(() => {
     const storedTasks = localStorage.getItem("tasks");
     if (storedTasks) {
@@ -55,42 +55,62 @@ function App() {
         console.error('Invalid JSON:', e);
       }
     }
- 
+
     const storedHearts = localStorage.getItem("heartsOwned");
     if (storedHearts) {
       const parsed = parseInt(storedHearts, 10);
       if (!Number.isNaN(parsed)) setHeartsOwned(parsed);
     }
- 
+
     const storedVideoId = localStorage.getItem("selectedVideoId");
     if (storedVideoId) setSelectedVideoId(storedVideoId);
   }, []);
- 
+
   React.useEffect(() => {
     localStorage.setItem("heartsOwned", String(heartsOwned));
   }, [heartsOwned]);
- 
+
   React.useEffect(() => {
     localStorage.setItem("selectedVideoId", selectedVideoId);
   }, [selectedVideoId]);
- 
+
  const tasksCompleted = tasks.filter(task => task.isCompleted === true).length;
  const tasksTotal = tasks.length;
- 
+
  //celebration trigger: more than one task exists, and every one of them is done
  const allTasksCompleted = tasksTotal > 1 && tasksCompleted === tasksTotal;
- 
+
  const MAX_HEARTS = 10;
  // Heart n costs 50n points; cumulative cost for h hearts is 50*(1+2+...+h) = 25h(h+1)
  const spentPoints = 25 * heartsOwned * (heartsOwned + 1);
  const pointsAvailable = Math.max(0, totalPoints - spentPoints);
  const nextHeartCost = heartsOwned < MAX_HEARTS ? 50 * (heartsOwned + 1) : null;
  const canBuyHeart = nextHeartCost !== null && pointsAvailable >= nextHeartCost;
- 
+
  const buyHeart = () => {
    if (!canBuyHeart) return;
    setHeartsOwned(h => Math.min(MAX_HEARTS, h + 1));
  };
+ 
+  const handleSetTasks = (updater) => {
+   setTasks((prevTasks) => {
+     const nextTasks = typeof updater === 'function' ? updater(prevTasks) : updater;
+ 
+     let delta = 0;
+     nextTasks.forEach((next) => {
+       const prev = prevTasks.find((t) => t.id === next.id);
+       if (prev && prev.isCompleted !== next.isCompleted) {
+         delta += next.isCompleted ? 10 : -10;
+       }
+     });
+ 
+     if (delta !== 0) {
+       setTotalPoints((p) => Math.max(0, p + delta));
+     }
+ 
+     return nextTasks;
+   });
+ }; 
  
   // Tab 0: Card + stats sit side by side; Form spans full width beneath both.
   // Tab 1: only Form is shown, in that same full-width row.
@@ -100,17 +120,13 @@ function App() {
         tasksCompleted={tasksCompleted}
         tasksTotal={tasksTotal}
         pointsAvailable={pointsAvailable}
-        nextHeartCost={nextHeartCost}
-        canBuyHeart={canBuyHeart}
-        onBuyHeart={buyHeart}
-        onPointsChange={setTotalPoints}
       />
     </div>
   );
  
   const formRow = (
     <div className="form-row">
-      <Form tasks={tasks} setTasks={setTasks} />
+      <Form tasks={tasks} setTasks={handleSetTasks} />
     </div>
   );
  
@@ -119,6 +135,11 @@ function App() {
   <div className='control-bar'> </div>
     <ControlBar 
       activeTab={activeTab}
+      pointsProps={{
+          nextHeartCost,
+          canBuyHeart,
+          onBuyHeart: buyHeart,
+      }}
       taskProps={{
           sortBy,
           setSortBy,
@@ -151,7 +172,7 @@ function App() {
  
         {activeTab === 1 && formRow }
  
-        {activeTab === 3 && <Settings tasks={tasks} setTasks={setTasks} />}
+        {activeTab === 3 && <Settings tasks={tasks} setTasks={handleSetTasks} />}
         
         <div className={`video-box${activeTab === 2 ? '' : ' video-hidden'}`}>
  
@@ -167,7 +188,7 @@ function App() {
       {activeTab !== 3 && (
           <>
           {controlRow}
-          <TaskList tasks={tasks} setTasks={setTasks}   
+          <TaskList tasks={tasks} setTasks={handleSetTasks}   
                     sortBy={sortBy} setSortBy={setSortBy}
                     showCompleted={showCompleted} setShowCompleted={setShowCompleted} 
             />
@@ -178,5 +199,7 @@ function App() {
   );   
 }
  
-
+ 
+ 
 export default App;
+ 

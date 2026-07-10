@@ -59,7 +59,7 @@ function seededRandom(seed) {
  *  - onOrderChange (function, optional) called with array of {index, x, y} when drag ends
  */
 function JarCharms({
-    total = 10,
+  total = 10,
   filled = 0,
   size = 320,
   palette = DEFAULT_PALETTE,
@@ -235,125 +235,127 @@ function JarCharms({
   };
  
   return (
-    <div
-    className='jar-charm'
-      ref={containerRef}
-      style={{
-        position: "relative",
-        width: size,
-        height: size,
-        maxWidth: "100%",
-        aspectRatio: "1 / 1",
-        userSelect: "none",
-        touchAction: "none",
-      }}
-      onPointerMove={handlePointerMove}
-      onPointerUp={endDrag}
-      onPointerLeave={endDrag}
-    >
-      {/* Background: solid jar */}
-      <img
-        src={JAR_BG}
-        alt=""
-        draggable={false}
+    <div className='jar-container'>
+      <div
+      className='jar-charm'
+        ref={containerRef}
         style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          pointerEvents: "none",
-          zIndex: 0,
+          position: "relative",
+          width: size,
+          height: size,
+          maxWidth: "100%",
+          aspectRatio: "1 / 1",
+          userSelect: "none",
+          touchAction: "none",
         }}
-      />
- 
-      {/* Orbs layer, sits between the solid jar and the glass overlay */}
-      <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
-        {positions.map((pos, i) => {
-          const isFilled = i < clampedFilled;
-          const isDragging = draggingIndex === i;
-          const paletteColor = palette[i % palette.length];
-          const baseColor = isFilled
-            ? filledColor || paletteColor
-            : emptyColor || DEFAULT_EMPTY_COLOR;
-          const { width, height } = orbSize;
-          const wobbleDuration = 3.2 + seededRandom(i * 5.2) * 2.2;
-          const wobbleDelay = -seededRandom(i * 2.3) * wobbleDuration;
- 
-          return (
-            <div
-              key={i}
-              onPointerDown={(e) => handlePointerDown(e, i)}
-              style={{
-                position: "absolute",
-                left: pos.x - width / 2,
-                top: pos.y - height / 2,
-                width,
-                height,
-                cursor: isDragging ? "grabbing" : "grab",
-                zIndex: isDragging ? 30 : 2,
-                transition: isDragging
-                  ? "none"
-                  : "left 0.25s ease, top 0.25s ease",
-                animation: isDragging
-                  ? "none"
-                  : `jar-orb-settle ${wobbleDuration}s ease-in-out ${wobbleDelay}s infinite`,
-              }}
-            >
-              {/* recolorable base fill, masked to the star's silhouette */}
+        onPointerMove={handlePointerMove}
+        onPointerUp={endDrag}
+        onPointerLeave={endDrag}
+      >
+        {/* Background: solid jar */}
+        <img
+          src={JAR_BG}
+          alt=""
+          draggable={false}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+  
+        {/* Orbs layer, sits between the solid jar and the glass overlay */}
+        <div style={{ position: "absolute", inset: 0, zIndex: 1 }}>
+          {positions.map((pos, i) => {
+            const isFilled = i < clampedFilled;
+            const isDragging = draggingIndex === i;
+            const paletteColor = palette[i % palette.length];
+            const baseColor = isFilled
+              ? filledColor || paletteColor
+              : emptyColor || DEFAULT_EMPTY_COLOR;
+            const { width, height } = orbSize;
+            const wobbleDuration = 3.2 + seededRandom(i * 5.2) * 2.2;
+            const wobbleDelay = -seededRandom(i * 2.3) * wobbleDuration;
+  
+            return (
               <div
+                key={i}
+                onPointerDown={(e) => handlePointerDown(e, i)}
                 style={{
                   position: "absolute",
-                  inset: 0,
-                  backgroundColor: baseColor,
-                  WebkitMaskImage: `url(${ORB_SILHOUETTE})`,
-                  maskImage: `url(${ORB_SILHOUETTE})`,
-                  WebkitMaskSize: "contain",
-                  maskSize: "contain",
-                  WebkitMaskRepeat: "no-repeat",
-                  maskRepeat: "no-repeat",
-                  WebkitMaskPosition: "center",
-                  maskPosition: "center",
+                  left: pos.x - width / 2,
+                  top: pos.y - height / 2,
+                  width,
+                  height,
+                  cursor: isDragging ? "grabbing" : "grab",
+                  zIndex: isDragging ? 30 : 2,
+                  transition: isDragging
+                    ? "none"
+                    : "left 0.25s ease, top 0.25s ease",
+                  animation: isDragging
+                    ? "none"
+                    : `jar-orb-settle ${wobbleDuration}s ease-in-out ${wobbleDelay}s infinite`,
                 }}
-              />
-              {/* painted shading, always the same, composited on top */}
-              <img
-                src={ORB_SHADING}
-                alt=""
-                draggable={false}
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  width: "100%",
-                  height: "100%",
-                }}
-              />
-            </div>
-          );
-        })}
+              >
+                {/* recolorable base fill, masked to the star's silhouette */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    backgroundColor: baseColor,
+                    WebkitMaskImage: `url(${ORB_SILHOUETTE})`,
+                    maskImage: `url(${ORB_SILHOUETTE})`,
+                    WebkitMaskSize: "contain",
+                    maskSize: "contain",
+                    WebkitMaskRepeat: "no-repeat",
+                    maskRepeat: "no-repeat",
+                    WebkitMaskPosition: "center",
+                    maskPosition: "center",
+                  }}
+                />
+                {/* painted shading, always the same, composited on top */}
+                <img
+                  src={ORB_SHADING}
+                  alt=""
+                  draggable={false}
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                  }}
+                />
+              </div>
+            );
+          })}
+        </div>
+  
+        {/* Foreground: transparent glass overlay, occludes anything outside the interior */}
+        <img
+          src={JAR_OVERLAY}
+          alt=""
+          draggable={false}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            imageRendering: "pixelated",
+            pointerEvents: "none",
+            zIndex: 3,
+          }}
+        />
+  
+        <style>{`
+          @keyframes jar-orb-settle {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(3deg); }
+          }
+        `}</style>
       </div>
- 
-      {/* Foreground: transparent glass overlay, occludes anything outside the interior */}
-      <img
-        src={JAR_OVERLAY}
-        alt=""
-        draggable={false}
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          imageRendering: "pixelated",
-          pointerEvents: "none",
-          zIndex: 3,
-        }}
-      />
- 
-      <style>{`
-        @keyframes jar-orb-settle {
-          0%, 100% { transform: rotate(0deg); }
-          50% { transform: rotate(3deg); }
-        }
-      `}</style>
     </div>
   );
 }
