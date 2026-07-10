@@ -1,6 +1,6 @@
-import TaskListControls from './TaskListControls';
-import VideoControler from './VideoControler';
-import HeartMeter from './HeartMeter';
+import TaskListControls from './TaskListControls.jsx';
+import VideoControler from './VideoControler.jsx';
+import Heartmeter from './Heartmeter.jsx';
 
 import heartImage from './assets/FilledHeart.png';
 import heartBackground from './assets/heartBase.png';

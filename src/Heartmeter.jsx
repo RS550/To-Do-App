@@ -10,13 +10,13 @@ const HEART_ICON_SIZE = 22;   //px, width/height of each heart in the meter
 //bought as a whole unit (via TaskTracking's buy button), so there's no
 //partial-fill state anymore — a heart is either owned (filled) or not
 //yet purchased (outline only).
-function HeartMeter({ heartsOwned = 0 }) {
+function Heartmeter({ heartsOwned = 0 }) {
 
     const filledCount = Math.min(HEART_METER_SIZE, Math.max(0, heartsOwned));
 
     return (
         <div
-          className="heartMeter"
+          className="Heartmeter"
           role="img"
           aria-label={`${filledCount} of ${HEART_METER_SIZE} hearts purchased`}
         >
@@ -25,7 +25,7 @@ function HeartMeter({ heartsOwned = 0 }) {
 
             return (
               <span
-                className="heartMeterHeart"
+                className="HeartmeterHeart"
                 key={i}
                 style={{
                   position: 'relative',
@@ -74,4 +74,4 @@ function HeartMeter({ heartsOwned = 0 }) {
     );
 }
 
-export default HeartMeter;
+export default Heartmeter;
