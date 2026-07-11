@@ -115,6 +115,7 @@ function App() {
       pointsProps={{
           nextHeartCost,
           canBuyHeart,
+          heartsOwned,
           onBuyHeart: buyHeart,
       }}
       taskProps={{

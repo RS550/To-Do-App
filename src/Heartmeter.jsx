@@ -34,15 +34,15 @@ function Heartmeter({ heartsOwned = 0 }) {
                   height: HEART_ICON_SIZE,
                 }}
               >
-                {/* empty state: outline only, always visible underneath the fill */}
-                <svg
-                  className="heartOutline"
-                  viewBox="0 0 24 24"
-                  width={HEART_ICON_SIZE}
-                  height={HEART_ICON_SIZE}
-                >
-                  <path d={HEART_OUTLINE_PATH} fill="none" stroke="currentColor" strokeWidth="1.5" />
-                </svg>
+                {/* empty state: outline image, always visible underneath the fill */}
+                <img
+                className="heartOutline"
+                src={HEART_OUTLINE_PATH}
+                alt=""
+                width={HEART_ICON_SIZE}
+                height={HEART_ICON_SIZE}
+                style={{ position: 'absolute', top: 0, left: 0, display: 'block' }}
+                />
 
                 {/* filled state: the actual heart image, shown once this heart has been bought */}
                 {isFilled && (

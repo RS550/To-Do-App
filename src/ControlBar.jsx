@@ -3,7 +3,6 @@ import VideoControler from './VideoControler.jsx';
 import Heartmeter from './Heartmeter.jsx';
 
 import heartImage from './assets/FilledHeart.png';
-import heartBackground from './assets/heartBase.png';
 
 function ControlBar({
   activeTab,
@@ -11,24 +10,20 @@ function ControlBar({
   taskProps,
   videoProps,
 }) {
-    const { nextHeartCost, canBuyHeart, onBuyHeart } = pointsProps;
+    const { nextHeartCost, canBuyHeart, onBuyHeart, heartsOwned } = pointsProps;
  
     const buyButtonTitle =
     nextHeartCost === null ? 'All hearts collected' : `${nextHeartCost} points`;
  
-    //outline-only heart, used as the 'empty' background layer under the fill
-    const HEART_OUTLINE_PATH = heartBackground;
-    const HEART_METER_SIZE = 10;  //max purchasable hearts
-    const HEART_ICON_SIZE = 22;   //px, width/height of each heart in the meter
-
-   return (
+       return (
     <div className="control-bar">
       <div className="control-bar-left">
         <TaskListControls {...taskProps} />
       </div>
- 
+
       <div className="control-bar-center">
-         
+        <Heartmeter heartsOwned={heartsOwned} />
+
         <button
           type="button"
           className="heart-button"
@@ -38,14 +33,14 @@ function ControlBar({
         ><img
           className="heart"
           src={heartImage}
-          width={HEART_ICON_SIZE}
-          height={HEART_ICON_SIZE}
+          width={22}
+          height={22}
           />
-          
+
           Buy Heart
         </button>
       </div>
- 
+
       <div className="control-bar-right">
         <VideoControler {...videoProps} />
       </div>
@@ -53,5 +48,5 @@ function ControlBar({
     </div>
   );
 }
- 
+
 export default ControlBar;
