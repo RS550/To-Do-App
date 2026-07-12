@@ -16,7 +16,7 @@ A React + Vite to-do app with task prioritization, due dates, drag-and-drop reor
 - **Points & purchases** — completing a task earns points, which can be spent on hearts for your Blueberry companion (more purchasable visual assets — new Blueberry models, jar styles, star designs, and more — are planned)
 - **Progress tracking** showing completed vs. total tasks
 - **Flexible sorting** — switch between manual (drag-and-drop) order, priority, or due date without losing your original ordering
-- **Import / export** your task list as JSON, for backups or moving between devices — now fully covers points, purchases, and video preferences alongside tasks
+- **Import / export** your task list as JSON, for backups or moving between devices
 - **Reset to base** — restore the app to its default state from the Settings tab
 - **Persistent storage** — your data is saved to `localStorage`, so everything survives a page refresh
 - **Three views** via the nav bar:
@@ -30,7 +30,7 @@ A React + Vite to-do app with task prioritization, due dates, drag-and-drop reor
 - [MUI (Material UI)](https://mui.com/) — Accordion, Tabs, ToggleButtons, Rating, DatePicker
 - [dayjs](https://day.js.org/) — date handling for the due date picker
 - [nanoid](https://github.com/ai/nanoid) — unique task IDs
-- [YouTube API](https://developers.google.com/youtube) — powers the Lofi tab's video selection and playback
+- [react-youtube](https://github.com/tjallingt/react-youtube) — wraps the YouTube IFrame Player API for the Lofi tab
 ## Getting Started
  
 ### Prerequisites
@@ -77,22 +77,30 @@ npm run lint
  
 ```
 src/
-├── main.jsx                # App entry point, mounts <App /> to the DOM
-├── App.jsx                 # Top-level layout, tab/view state, and localStorage load
-├── App.css                 # Global styles
-├── Header.jsx               # Page header
-├── NavBar.jsx               # Tab navigation (Blueberry / List / Lofi / Settings)
-├── Card.jsx                 # Pet companion card
-├── JarCharms.jsx             # Star-based visualization of task count/completion
-├── Form.jsx                 # New task input + submit handling (below Card/JarCharms)
-├── DropDownMenu.jsx         # Expandable panel for priority, due date, and project
-├── TaskRanking.jsx          # Star-rating priority selector
-├── TaskTracking.jsx         # Completed/total task counter, wraps Heartmeter
-├── Heartmeter.jsx            # Heart-shaped progress meter (partial fill per heart)
-├── TaskList.jsx              # Renders, sorts, filters, edits, and reorders tasks
-├── Settings.jsx              # Settings tab: JSON export/import and reset-to-base
-├── SparkleCelebration.jsx    # Full-screen sparkle animation when all tasks are completed
-└── assets/                  # Images (pet idle animation, heart icon, card background)
+├── main.jsx                 # App entry point, mounts <App /> to the DOM
+├── App.jsx                  # Top-level state (tasks, points, hearts, video, tab) and layout
+├── App.css                  # Global styles
+├── Header.jsx                # Page header
+├── NavBar.jsx                # Tab navigation (Blueberry / List / Lofi / Settings)
+├── Card.jsx                  # Pet companion card, wraps Heartmeter
+├── Heartmeter.jsx             # Row of heart icons showing hearts purchased
+├── TaskTracking.jsx           # Completed/total counter + points display, wraps JarCharms
+├── JarCharms.jsx               # Draggable star-orb jar visualization of task progress
+├── Form.jsx                   # New task input + submit handling (below Card/JarCharms)
+├── DropDownMenu.jsx           # Priority/due date/project panel — shared by Form (create) and TaskItem (edit) via a `variant` prop
+├── TaskRanking.jsx             # Star-rating priority selector used inside DropDownMenu
+├── ControlBar.jsx              # Row above the task list: sort controls, buy-heart button, video controls
+├── TaskListControls.jsx         # Sort-by dropdown + show/hide-completed toggle
+├── VideoControler.jsx           # Lofi video picker (presets + custom URL via YouTube API) and play/pause icon
+├── VideoPlayer.jsx              # Wraps react-youtube; exposes play/pause/toggle via a ref
+├── TaskList.jsx                 # Renders the flat task list, or grouped-by-project view
+├── SubListGroup.jsx              # One collapsible project section (used in grouped view)
+├── TaskItem.jsx                  # Single task row; owns its own inline edit panel
+├── useSortedTasks.js              # Hook: sorting/filtering/grouping logic for TaskList
+├── usePersistedState.js           # Hook: localStorage-backed state shared across components, plus resetAllPersistedState()
+├── Settings.jsx                    # Settings tab: JSON export/import and reset-to-base
+├── SparkleCelebration.jsx           # Full-screen sparkle animation when all tasks are completed
+└── assets/                          # Images (pet idle animation, heart icon, jar/star art, card background)
 ```
  
 ## Usage
@@ -103,7 +111,8 @@ src/
 4. Click a task to edit any of its fields; check the box to mark it complete; click **X** to delete it.
 5. Completing tasks earns points — spend them on hearts for Blueberry from the Blueberry tab.
 6. Head to the **Lofi** tab to pick a background video or add your own; your choice and sound status follow you to the other tabs via the icon and dropdown in the nav area.
-7. Use **Export**/**Import** on the Settings tab to save or load your full app state as a JSON file, or **Reset to base** to start fresh.
+7. Use **Export**/**Import** on the Settings tab to save or load your task list as a JSON file, or **Reset to base** to wipe all saved data (tasks, points, hearts, videos, and projects) on this device.
+
 ## Known Issues / Roadmap
  
 - Drag and drop reordering can accidentally push items to the top of the list.
