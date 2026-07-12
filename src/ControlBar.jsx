@@ -1,6 +1,5 @@
 import TaskListControls from './TaskListControls.jsx';
 import VideoControler from './VideoControler.jsx';
-import Heartmeter from './Heartmeter.jsx';
 
 import heartImage from './assets/FilledHeart.png';
 
@@ -22,21 +21,18 @@ function ControlBar({
       </div>
 
       <div className="control-bar-center">
-        <Heartmeter heartsOwned={heartsOwned} />
-
         <button
           type="button"
           className="heart-button"
           onClick={onBuyHeart}
           disabled={!canBuyHeart}
           title={buyButtonTitle}
-        ><img
+          
+        >
+          <img
           className="heart"
           src={heartImage}
-          width={22}
-          height={22}
           />
-
           Buy Heart
         </button>
       </div>

@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
-import JAR_BG from "./assets/jarV3.png";
-import JAR_OVERLAY from "./assets/jarTopV3.png";
-import ORB_SILHOUETTE from "./assets/starBase300.png"; // flat, fully-opaque shape — used as a recolorable mask
-import ORB_SHADING from "./assets/star300.png"; // painted highlight/shadow ink, same on every orb
+import JAR_BG from "./assets/jar.png";
+import JAR_OVERLAY from "./assets/jarTop.png";
+import ORB_SILHOUETTE from "./assets/starBase.png"; // flat, fully-opaque shape — used as a recolorable mask
+import ORB_SHADING from "./assets/starOutline.png"; // painted highlight/shadow ink, same on every orb
 
 // Interior region as a fraction of the jar image (measured from the artwork),
 // i.e. the area that sits "inside the glass" where orbs should be visible.
 const INTERIOR = {
-  left: 0.2,
-  top: 0.2,
-  right: 0.72,
-  bottom: 0.746,
+  left: 0.19,
+  top: 0.27,
+  right: 0.82,
+  bottom: 0.82,
 };
 
 // Native pixel dimensions of the orb art, used to keep orbs from being
@@ -21,10 +21,9 @@ const ORB_ASPECT = ORB_ART_SIZE.width / ORB_ART_SIZE.height;
 // Preset color options for filled orbs. Cycled through by index unless
 // a single `filledColor` override is passed.
 const DEFAULT_PALETTE = [
-    "#eedfc1", "#f5d491", 
-    "#699edb",  "#a7c9f0",
-    "#f7aeec", "#f899dd",
-    "#d096fa", "#bd81e8"
+    "#fae1c7", "#f2d8a1", 
+    "#7fade3", "#f1aef7",
+    "#a59cfc", "#bf83ea"
 
 ];
 

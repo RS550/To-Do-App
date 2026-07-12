@@ -109,7 +109,6 @@ function App() {
  
   const controlRow = (
   <>
-  <div className='control-bar'> </div>
     <ControlBar 
       activeTab={activeTab}
       pointsProps={{

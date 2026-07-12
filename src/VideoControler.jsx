@@ -31,15 +31,15 @@ const videoButtonSx = {
   color: 'inherit',
   border: 'none',
   '&:hover': {
-    backgroundColor: '#7160c1',
-    color: '#cac0f5',
+    backgroundColor: 'inherit',
   },
 };
 
 export const PRESET_VIDEOS = [
-  { id: 'preset-1', name: 'Lofi Girl', videoId: '4xDzrJKXOOY' },
-  { id: 'preset-2', name: 'Coffee Shop Radio', videoId: 'lTRiuFIWV54' },
-  { id: 'preset-3', name: 'Chillhop Radio', videoId: '5yx6BWlEVcY' },
+  { id: 'preset-1', name: 'Synthwave Radio', videoId: '4xDzrJKXOOY' },
+  { id: 'preset-2', name: 'Lofi Girl', videoId: 'X4VbdwhkE10' },
+  { id: 'preset-3', name: 'Spring Mornings', videoId: 'wePMdTNW3C4' },
+  { id: 'preset-4', name: 'Costal Coffee Vibes', videoId: 'v7gCSBMuBog' },
 ];
  
 // Pulls the 11-character video id out of any of the common YouTube URL
@@ -61,7 +61,6 @@ export function extractYouTubeId(input) {
   }
   return null;
 }
-
 
 // selectedVideoId / setSelectedVideoId are lifted up to App so the choice
 // can be shared with whatever renders the actual <iframe>.

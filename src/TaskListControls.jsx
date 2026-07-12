@@ -116,7 +116,7 @@ function TaskListControls({ sortBy, setSortBy, showCompleted, setShowCompleted }
           onClick={handleToggleShowCompleted}
           sx={actionButtonSx}
         >
-          {showCompleted ? <VisibilityIcon fontSize="small" /> : <VisibilityOffIcon fontSize="small" />}
+          {showCompleted ? <VisibilityIcon /> : <VisibilityOffIcon />}
         </IconButton>
       </Tooltip>
     </div>
